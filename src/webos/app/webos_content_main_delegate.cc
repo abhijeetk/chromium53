@@ -24,6 +24,7 @@ namespace webos {
 
 namespace {
 bool SubprocessNeedsResourceBundle(const std::string& process_type) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return process_type == switches::kZygoteProcess ||
          process_type == switches::kPpapiPluginProcess ||
          process_type == switches::kPpapiBrokerProcess ||
@@ -36,6 +37,7 @@ bool SubprocessNeedsResourceBundle(const std::string& process_type) {
 WebOSContentMainDelegate::WebOSContentMainDelegate() {}
 
 bool WebOSContentMainDelegate::BasicStartupComplete(int* exit_code) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::CommandLine* parsedCommandLine = base::CommandLine::ForCurrentProcess();
   parsedCommandLine->AppendSwitch(switches::kInProcessGPU);
   parsedCommandLine->AppendSwitch(switches::kNoSandbox);
@@ -52,25 +54,30 @@ bool WebOSContentMainDelegate::BasicStartupComplete(int* exit_code) {
 }
 
 void WebOSContentMainDelegate::PreSandboxStartup() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebosResourceDelegate::InitializeResourceBundle();
 }
 
 content::ContentBrowserClient*
 WebOSContentMainDelegate::CreateContentBrowserClient() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return g_webos_content_browser_client.Pointer();
 }
 
 content::ContentRendererClient*
 WebOSContentMainDelegate::CreateContentRendererClient() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return g_webos_content_renderer_client.Pointer();
 }
 
 void WebOSContentMainDelegate::ProcessExiting(const std::string& process_type) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (SubprocessNeedsResourceBundle(process_type))
     ResourceBundle::CleanupSharedInstance();
 }
 
 WebOSContentBrowserClient* GetWebOSContentBrowserClient() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return g_webos_content_browser_client.Pointer();
 }
 

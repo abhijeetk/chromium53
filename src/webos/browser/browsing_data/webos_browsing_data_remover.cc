@@ -20,11 +20,13 @@ namespace webos {
 
 // static
 WebOSBrowsingDataRemover::TimeRange WebOSBrowsingDataRemover::Unbounded() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return TimeRange(base::Time(), base::Time::Max());
 }
 
 WebOSBrowsingDataRemover* WebOSBrowsingDataRemover::GetForBrowserContext(
     WebOSBrowserContext* browser_context) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return new WebOSBrowsingDataRemover(browser_context);
 }
 
@@ -35,12 +37,15 @@ WebOSBrowsingDataRemover::WebOSBrowsingDataRemover(
       waiting_for_clear_cache_(false),
       waiting_for_clear_code_cache_(false),
       waiting_for_clear_storage_partition_data_(false),
-      weak_ptr_factory_(this) {}
+      weak_ptr_factory_(this) {
+        fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
+      }
 
 WebOSBrowsingDataRemover::~WebOSBrowsingDataRemover() {}
 
 void OnClearedChannelIDsOnIOThread(net::URLRequestContextGetter* rq_context,
                                    const base::Closure& callback) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
 
   rq_context->GetURLRequestContext()
@@ -53,6 +58,7 @@ void OnClearedChannelIDsOnIOThread(net::URLRequestContextGetter* rq_context,
 void ClearChannelIDsOnIOThread(
     scoped_refptr<net::URLRequestContextGetter> rq_context,
     const base::Closure& callback) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
   net::ChannelIDService* channel_id_service =
       rq_context->GetURLRequestContext()->channel_id_service();
@@ -63,6 +69,7 @@ void ClearChannelIDsOnIOThread(
 
 void WebOSBrowsingDataRemover::Remove(const TimeRange& time_range,
                                       int remove_mask) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   DCHECK_NE(base::Time(), time_range.end);
 
@@ -190,10 +197,12 @@ void WebOSBrowsingDataRemover::Remove(const TimeRange& time_range,
 }
 
 void WebOSBrowsingDataRemover::NotifyAndDelete() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::MessageLoop::current()->DeleteSoon(FROM_HERE, this);
 }
 
 void WebOSBrowsingDataRemover::NotifyAndDeleteIfDone() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!AllDone())
     return;
 
@@ -201,30 +210,35 @@ void WebOSBrowsingDataRemover::NotifyAndDeleteIfDone() {
 }
 
 void WebOSBrowsingDataRemover::OnClearedChannelIDs() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   waiting_for_clear_channel_ids_ = false;
   NotifyAndDeleteIfDone();
 }
 
 void WebOSBrowsingDataRemover::OnClearedCache() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   waiting_for_clear_cache_ = false;
   NotifyAndDeleteIfDone();
 }
 
 void WebOSBrowsingDataRemover::OnClearedCodeCache() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   waiting_for_clear_code_cache_ = false;
   NotifyAndDeleteIfDone();
 }
 
 void WebOSBrowsingDataRemover::OnClearedStoragePartitionData() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   waiting_for_clear_storage_partition_data_ = false;
   NotifyAndDeleteIfDone();
 }
 
 bool WebOSBrowsingDataRemover::AllDone() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return !waiting_for_clear_channel_ids_ && !waiting_for_clear_cache_ &&
          !waiting_for_clear_code_cache_ && !waiting_for_clear_storage_partition_data_;
 }

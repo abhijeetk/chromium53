@@ -13,6 +13,7 @@ namespace webos {
 WebOSMain::WebOSMain(WebOSMainDelegate* delegate) : delegate_(delegate) {}
 
 int WebOSMain::Run(int argc, const char** argv) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSContentMainDelegate webos_main_delegate;
   webos_main_delegate.SetBrowserStartupCallback(
       base::Bind(&WebOSMainDelegate::AboutToCreateContentBrowserClient,

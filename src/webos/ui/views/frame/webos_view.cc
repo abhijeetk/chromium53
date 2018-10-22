@@ -49,12 +49,15 @@ class WebOSViewLayout : public views::LayoutManager {
 WebOSViewLayout::WebOSViewLayout(views::View* contents_container)
     : contents_container_(contents_container),
       host_(NULL) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 WebOSViewLayout::~WebOSViewLayout() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 void WebOSViewLayout::Layout(views::View* webos_view) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK(host_ == webos_view);
 
   contents_container_->SetBoundsRect(webos_view->bounds());
@@ -63,6 +66,7 @@ void WebOSViewLayout::Layout(views::View* webos_view) {
 
 gfx::Size WebOSViewLayout::GetPreferredSize(
     const views::View* host) const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return gfx::Size();
 }
 
@@ -87,41 +91,50 @@ WebOSView::WebOSView(webos::WebAppWindow* webapp_window)
       browser_context_(NULL),
       contents_web_view_(NULL),
       initialized_(false) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 WebOSView::~WebOSView() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 void WebOSView::Init(content::BrowserContext* browser_context) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   browser_context_ = browser_context;
 }
 
 WebContents* WebOSView::GetActiveWebContents() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return contents_web_view_ ? contents_web_view_->GetWebContents() : NULL;
 }
 
 void WebOSView::RestoreFocus() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebContents* selected_web_contents = GetActiveWebContents();
   if (selected_web_contents)
     selected_web_contents->RestoreFocus();
 }
 
 void WebOSView::SetFullscreen(bool fullscreen) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     widget_->SetFullscreen(fullscreen);
 }
 
 void WebOSView::OnDesktopWindowTreeHostCreated(views::DesktopWindowTreeHost* host) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (webapp_window_)
     webapp_window_->SetHost(host);
 }
 
 void WebOSView::OnDesktopWindowTreeHostDestroyed() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (webapp_window_)
     webapp_window_->SetHost(NULL);
 }
 
 void WebOSView::SetImeEnabled(bool enable) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   ui::InputMethod* input_method = GetWidget()->GetInputMethod();
 
   if (!input_method)
@@ -134,10 +147,12 @@ void WebOSView::SetImeEnabled(bool enable) {
 // WebOSView, BrowserWindow implementation:
 
 bool WebOSView::IsActive() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return widget_?widget_->IsActive():false;
 }
 
 bool WebOSView::IsMaximized() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     return widget_->IsMaximized();
 
@@ -145,6 +160,7 @@ bool WebOSView::IsMaximized() const {
 }
 
 bool WebOSView::IsMinimized() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     return widget_->IsMinimized();
 
@@ -152,6 +168,7 @@ bool WebOSView::IsMinimized() const {
 }
 
 bool WebOSView::IsFullscreen() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     return widget_->IsFullscreen();
 
@@ -159,12 +176,14 @@ bool WebOSView::IsFullscreen() const {
 }
 
 gfx::NativeWindow WebOSView::GetNativeWindow() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!GetWidget())
     return NULL;
   return GetWidget()->GetTopLevelWidget()->GetNativeWindow();
 }
 
 gfx::Rect WebOSView::GetRestoredBounds() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   gfx::Rect bounds;
   if (widget_)
     bounds = widget_->GetRestoredBounds();
@@ -175,6 +194,7 @@ gfx::Rect WebOSView::GetRestoredBounds() const {
 }
 
 ui::WindowShowState WebOSView::GetRestoredState() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return ui::SHOW_STATE_DEFAULT;
 }
 
@@ -183,12 +203,14 @@ gfx::Rect WebOSView::GetBounds() const {
 }
 
 void WebOSView::Show() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   RestoreFocus();
   if (widget_)
     widget_->Show();
 }
 
 void WebOSView::Close() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // This function is called by the destructor of WebAppWindow. So, WebOSView
   // should not access |webapp_window_|.
   webapp_window_ = NULL;
@@ -198,25 +220,30 @@ void WebOSView::Close() {
 }
 
 void WebOSView::Activate() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     widget_->Activate();
 }
 
 void WebOSView::Maximize() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     widget_->Maximize();
 }
 
 void WebOSView::Minimize() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     widget_->Minimize();
 }
 
 void WebOSView::SetBounds(const gfx::Rect& bounds) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   GetWidget()->SetBounds(bounds);
 }
 
 void WebOSView::FlashFrame(bool flash) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_)
     widget_->FlashFrame(flash);
 }
@@ -232,6 +259,7 @@ void WebOSView::WebContentsFocused(WebContents* contents) {
 #endif
 
 void WebOSView::AttachWebContents(content::WebContents* web_contents) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // If |contents_container_| already has the correct WebContents, we can save
   // some work.  This also prevents extra events from being reported by the
   // Visibility API under Windows, as ChangeWebContents will briefly hide
@@ -260,6 +288,7 @@ void WebOSView::AttachWebContents(content::WebContents* web_contents) {
 // WebOSView, views::WidgetObserver implementation:
 
 void WebOSView::OnWidgetDestroyed(views::Widget* widget) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (webapp_window_) {
     // WebOSView is destroyed before WebAppWindow is destroyed.
     webapp_window_->SetWebOSView(NULL);
@@ -282,6 +311,7 @@ void WebOSView::Layout() {
 }
 
 void WebOSView::PaintChildren(const ui::PaintContext& context) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // Paint the last so that it may paint its overlapping tabs.
   for (int i = 0; i < child_count(); ++i) {
     View* child = child_at(i);
@@ -293,22 +323,26 @@ void WebOSView::PaintChildren(const ui::PaintContext& context) {
 void WebOSView::ViewHierarchyChanged(
     const ViewHierarchyChangedDetails& details) {
   if (!initialized_ && details.child == this && GetWidget()) {
+      fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
     InitViews();
     initialized_ = true;
   }
 }
 
 void WebOSView::ChildPreferredSizeChanged(View* child) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   Layout();
 }
 
 void WebOSView::GetAccessibleState(ui::AXViewState* state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   state->role = ui::AX_ROLE_CLIENT;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // WebOSView, private:
 void WebOSView::InitViews() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   GetWidget()->AddObserver(this);
 
   // Stow a pointer to this object onto the window handle so that we can get at

@@ -31,6 +31,7 @@ WebOSNativeWidgetAura::WebOSNativeWidgetAura(
       view_(view),
       widget_(widget),
       root_window_tree_host_(NULL) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   GetNativeWindow()->SetName("WebOSNativeWidgetAura");
 }
 
@@ -44,19 +45,21 @@ WebOSNativeWidgetAura::~WebOSNativeWidgetAura() {
 // WebOSNativeWidgetAura, views::DesktopNativeWidgetAura overrides:
 
 void WebOSNativeWidgetAura::OnHostClosed() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   aura::client::SetVisibilityClient(GetNativeView()->GetRootWindow(), NULL);
   DesktopNativeWidgetAura::OnHostClosed();
 }
 
 void WebOSNativeWidgetAura::OnDesktopWindowTreeHostDestroyed(
     aura::WindowTreeHost* host) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   view_->OnDesktopWindowTreeHostDestroyed();
   DesktopNativeWidgetAura::OnDesktopWindowTreeHostDestroyed(host);
 }
 
 void WebOSNativeWidgetAura::InitNativeWidget(
     const views::Widget::InitParams& params) {
-
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   root_window_tree_host_ = views::DesktopWindowTreeHost::Create(widget_, this);
   view_->OnDesktopWindowTreeHostCreated(root_window_tree_host_);
 

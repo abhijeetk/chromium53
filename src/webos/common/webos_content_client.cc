@@ -49,6 +49,7 @@ std::string WebOSContentClient::GetUserAgent() const {
 
 void WebOSContentClient::AddPepperPlugins(
     std::vector<content::PepperPluginInfo>* plugins) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::FilePath path;
 #if defined(WIDEVINE_CDM_AVAILABLE) && defined(ENABLE_PEPPER_CDMS)
   static bool skip_widevine_cdm_file_check = false;

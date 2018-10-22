@@ -7,29 +7,29 @@
 namespace webos {
 
 WindowGroupConfiguration::WindowGroupConfiguration(const std::string& name)
-    : name_(name), is_anonymous_(false) {}
+    : name_(name), is_anonymous_(false) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);}
 
-WindowGroupConfiguration::~WindowGroupConfiguration() {}
+WindowGroupConfiguration::~WindowGroupConfiguration() {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);}
 
-void WindowGroupConfiguration::SetIsAnonymous(bool is_anonymous) {
+void WindowGroupConfiguration::SetIsAnonymous(bool is_anonymous) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   is_anonymous_ = is_anonymous;
 }
 
-bool WindowGroupConfiguration::GetIsAnonymous() const {
+bool WindowGroupConfiguration::GetIsAnonymous() const {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return is_anonymous_;
 }
 
-std::string WindowGroupConfiguration::GetName() const {
+std::string WindowGroupConfiguration::GetName() const {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return name_;
 }
 
 void WindowGroupConfiguration::AddLayer(
-    const WindowGroupLayerConfiguration& layer_config) {
+    const WindowGroupLayerConfiguration& layer_config) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   layers_.push_back(layer_config);
 }
 
 const std::vector<WindowGroupLayerConfiguration>&
-WindowGroupConfiguration::GetLayers() const {
+WindowGroupConfiguration::GetLayers() const {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return layers_;
 }
 

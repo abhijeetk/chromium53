@@ -20,7 +20,8 @@
 #include "content/public/browser/content_browser_client.h"
 #include "content/public/browser/quota_permission_context.h"
 #include "content/public/browser/resource_dispatcher_host_delegate.h"
-
+#include <stdlib.h> 
+#include <sys/types.h>
 #include "webos/browser/webos_browser_main_parts.h"
 #include <memory>
 

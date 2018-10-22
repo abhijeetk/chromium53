@@ -23,45 +23,55 @@ bool WebOSRootView::GetDropFormats(
     int* formats,
     std::set<ui::Clipboard::FormatType>* format_types) {
   NOTIMPLEMENTED();
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return false;
 }
 
 bool WebOSRootView::AreDropTypesRequired() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return true;
 }
 
 bool WebOSRootView::CanDrop(const ui::OSExchangeData& data) {
   NOTIMPLEMENTED();
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return false;
 }
 
 void WebOSRootView::OnDragEntered(const ui::DropTargetEvent& event) {
   NOTIMPLEMENTED();
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return;
 }
 
 int WebOSRootView::OnDragUpdated(const ui::DropTargetEvent& event) {
   NOTIMPLEMENTED();
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return ui::DragDropTypes::DRAG_NONE;
 }
 
 void WebOSRootView::OnDragExited() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   NOTIMPLEMENTED();
 }
 
 int WebOSRootView::OnPerformDrop(const ui::DropTargetEvent& event) {
   NOTIMPLEMENTED();
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return ui::DragDropTypes::DRAG_NONE;
 }
 
 const char* WebOSRootView::GetClassName() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return kViewClassName;
 }
 
 bool WebOSRootView::OnMouseWheel(const ui::MouseWheelEvent& event) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return RootView::OnMouseWheel(event);
 }
 
 ui::EventDispatchDetails WebOSRootView::OnEventFromSource(ui::Event* event) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return RootView::OnEventFromSource(event);
 }

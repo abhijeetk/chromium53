@@ -62,6 +62,7 @@ class SecurityPolicy {
  public:
   SecurityPolicy() {
     // Hardcoded path for now
+      fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
     std::string securityPolicySettings;
     if (!base::ReadFileToString(base::FilePath("/etc/wam/security_policy.conf"),
                                 &securityPolicySettings))
@@ -94,6 +95,7 @@ class SecurityPolicy {
 
   WebOSNetworkDelegate* CreateNetworkDelegate(
       std::map<std::string, std::string> extra_websocket_headers) {
+      fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
     WebOSNetworkDelegate* network_delegate = new WebOSNetworkDelegate(
         allowed_target_paths_, allowed_trusted_target_paths_,
         std::move(extra_websocket_headers));
@@ -174,12 +176,14 @@ WebOSRequestContextGetter::WebOSRequestContextGetter(
       request_interceptors_(std::move(request_interceptors)),
       extra_websocket_headers_(std::move(extra_websocket_headers)),
       proxy_rules_(proxy_rules) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   std::swap(protocol_handlers_, *protocol_handlers);
 }
 
 WebOSRequestContextGetter::~WebOSRequestContextGetter() {}
 
 net::URLRequestContext* WebOSRequestContextGetter::GetURLRequestContext() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!request_context_) {
     request_context_.reset(
         CreateRequestContext(browser_context_, &protocol_handlers_,
@@ -200,6 +204,7 @@ WebOSRequestContextGetter::GetNetworkTaskRunner() const {
 }
 
 void WebOSRequestContextGetter::InitializeSystemContextDependencies() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   host_resolver_ = net::HostResolver::CreateDefaultResolver(NULL);
 
   // TODO(lcwu): http://crbug.com/392352. For performance and security reasons,
@@ -240,6 +245,7 @@ void WebOSRequestContextGetter::InitializeMainContextDependencies(
     net::HttpTransactionFactory* transaction_factory,
     content::ProtocolHandlerMap* protocol_handlers,
     content::URLRequestInterceptorScopedVector request_interceptors) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   main_transaction_factory_.reset(transaction_factory);
   std::unique_ptr<net::URLRequestJobFactoryImpl> job_factory(
       new net::URLRequestJobFactoryImpl());
@@ -296,6 +302,7 @@ net::URLRequestContext* WebOSRequestContextGetter::CreateRequestContext(
     WebOSBrowserContext* browser_context,
     content::ProtocolHandlerMap* protocol_handlers,
     content::URLRequestInterceptorScopedVector request_interceptors) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK(BrowserThread::CurrentlyOn(BrowserThread::IO));
   InitializeSystemContextDependencies();
 
@@ -378,6 +385,7 @@ net::URLRequestContext* WebOSRequestContextGetter::CreateRequestContext(
 void WebOSRequestContextGetter::AppendExtraWebSocketHeader(
     const std::string& key,
     const std::string& value) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK(BrowserThread::CurrentlyOn(BrowserThread::IO));
 
   if (network_delegate_)

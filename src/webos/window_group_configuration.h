@@ -19,7 +19,8 @@
 
 #include "base/macros.h"
 #include "webos/common/webos_export.h"
-
+#include <sys/types.h>
+#include <unistd.h>
 #include <string>
 #include <vector>
 

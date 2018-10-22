@@ -35,13 +35,17 @@
 namespace webos {
 
 WebOSBrowserMainParts::WebOSBrowserMainParts()
-    : BrowserMainParts(), devtools_http_handler_(0) {}
+    : BrowserMainParts(), devtools_http_handler_(0) {
+        fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
+    }
 
 void WebOSBrowserMainParts::AddParts(WebOSBrowserMainExtraParts* parts) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webos_extra_parts_.push_back(parts);
 }
 
 void WebOSBrowserMainParts::PreMainMessageLoopRun() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   default_browser_context_ = new WebOSBrowserContextAdapter("Default");
 
   content::RenderFrameHost::AllowInjectingJavaScriptForWebOSWebView();
@@ -113,16 +117,19 @@ void WebOSBrowserMainParts::PreMainMessageLoopRun() {
 }
 
 void WebOSBrowserMainParts::PreEarlyInitialization() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   for (size_t i = 0; i < webos_extra_parts_.size(); ++i)
     webos_extra_parts_[i]->PreEarlyInitialization();
 }
 
 void WebOSBrowserMainParts::ToolkitInitialized() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   for (size_t i = 0; i < webos_extra_parts_.size(); ++i)
     webos_extra_parts_[i]->ToolkitInitialized();
 }
 
 int WebOSBrowserMainParts::PreCreateThreads() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebosResourceDelegate::InitializeResourceBundle();
 
   for (size_t i = 0; i < webos_extra_parts_.size(); ++i)
@@ -134,9 +141,11 @@ int WebOSBrowserMainParts::PreCreateThreads() {
 }
 
 void WebOSBrowserMainParts::PostDestroyThreads() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 bool WebOSBrowserMainParts::MainMessageLoopRun(int* result_code) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::RunLoop run_loop;
 
   run_loop.Run();
@@ -147,7 +156,7 @@ void WebOSBrowserMainParts::EnableDevTools() {
   int port;
   if (devtools_http_handler_)
       return;
-
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   devtools_http_handler_ = initDevTools();
 }
 
@@ -161,7 +170,7 @@ void WebOSBrowserMainParts::ArmWatchdog(content::BrowserThread::ID thread,
   watchdog->Arm();
   if (!watchdog->WatchingThreadTid())
     watchdog->SetWatchingThreadTid((long int)syscall(SYS_gettid));
-
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   content::BrowserThread::PostDelayedTask(
       thread,
       FROM_HERE,

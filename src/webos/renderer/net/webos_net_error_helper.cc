@@ -85,6 +85,7 @@ namespace webos {
 WebOsNetErrorHelper::WebOsNetErrorHelper(RenderFrame* render_frame)
     : RenderFrameObserver(render_frame),
       content::RenderFrameObserverTracker<WebOsNetErrorHelper>(render_frame) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   RenderThread::Get()->AddObserver(this);
 
   core_.reset(new NetErrorHelperCore(this,
@@ -145,6 +146,7 @@ void WebOsNetErrorHelper::GetErrorHTML(const blink::WebURLError& error,
                                   bool is_failed_post,
                                   bool is_ignoring_cache,
                                   std::string* error_html) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   core_->GetErrorHTML(GetFrameType(render_frame()), error, is_failed_post,
                       is_ignoring_cache, error_html);
 }
@@ -164,6 +166,7 @@ void WebOsNetErrorHelper::GenerateLocalizedErrorPage(
     bool* show_cached_copy_button_shown,
     bool* show_offline_pages_button_shown,
     std::string* error_html) const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   error_html->clear();
   // Resource will change to net error specific page
   int resource_id = IDR_WEBOS_NETWORK_ERROR_PAGE;
@@ -203,6 +206,7 @@ void WebOsNetErrorHelper::GenerateLocalizedErrorPage(
 
 void WebOsNetErrorHelper::LoadErrorPage(const std::string& html,
                                    const GURL& failed_url) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   render_frame()->GetWebFrame()->loadHTMLString(
       html, GURL(kUnreachableWebDataURL), failed_url, true);
 }
@@ -214,6 +218,7 @@ void WebOsNetErrorHelper::UpdateErrorPage(const blink::WebURLError& error,
                                      bool is_failed_post,
                                      bool can_show_network_diagnostics_dialog,
                                      bool has_offline_pages) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::DictionaryValue error_strings;
   WebOsLocalizedError::GetStrings(
       error.reason, error.domain.utf8(), error.unreachableURL, is_failed_post,
@@ -239,6 +244,7 @@ void WebOsNetErrorHelper::UpdateErrorPage(const blink::WebURLError& error,
 void WebOsNetErrorHelper::FetchNavigationCorrections(
     const GURL& navigation_correction_url,
     const std::string& navigation_correction_request_body) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK(!correction_fetcher_.get());
 
   correction_fetcher_.reset(
@@ -266,6 +272,7 @@ void WebOsNetErrorHelper::CancelFetchNavigationCorrections() {
 void WebOsNetErrorHelper::SendTrackingRequest(
     const GURL& tracking_url,
     const std::string& tracking_request_body) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // If there's already a pending tracking request, this will cancel it.
   tracking_fetcher_.reset(content::ResourceFetcher::Create(tracking_url));
   tracking_fetcher_->SetMethod("POST");
@@ -282,6 +289,7 @@ void WebOsNetErrorHelper::SendTrackingRequest(
 }
 
 void WebOsNetErrorHelper::ReloadPage(bool bypass_cache) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   render_frame()->GetWebFrame()->reload(
       bypass_cache ? blink::WebFrameLoadType::ReloadBypassingCache
                    : blink::WebFrameLoadType::Reload);
@@ -290,6 +298,7 @@ void WebOsNetErrorHelper::ReloadPage(bool bypass_cache) {
 void WebOsNetErrorHelper::OnNavigationCorrectionsFetched(
     const blink::WebURLResponse& response,
     const std::string& data) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // The fetcher may only be deleted after |data| is passed to |core_|.  Move
   // it to a temporary to prevent any potential re-entrancy issues.
   std::unique_ptr<content::ResourceFetcher> fetcher(
@@ -300,6 +309,7 @@ void WebOsNetErrorHelper::OnNavigationCorrectionsFetched(
 }
 
 void WebOsNetErrorHelper::LoadPageFromCache(const GURL& page_url) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   blink::WebFrame* web_frame = render_frame()->GetWebFrame();
   DCHECK(!base::EqualsASCII(
       base::StringPiece16(web_frame->dataSource()->request().httpMethod()),
@@ -318,6 +328,7 @@ void WebOsNetErrorHelper::ShowOfflinePages() {
 }
 
 void WebOsNetErrorHelper::OnNetErrorInfo(int status_num) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK(status_num >= 0 && status_num < error_page::DNS_PROBE_MAX);
   DVLOG(1) << "Received status " << DnsProbeStatusToString(status_num);
 
@@ -327,6 +338,7 @@ void WebOsNetErrorHelper::OnNetErrorInfo(int status_num) {
 void WebOsNetErrorHelper::OnTrackingRequestComplete(
     const blink::WebURLResponse& response,
     const std::string& data) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   tracking_fetcher_.reset();
 }
 

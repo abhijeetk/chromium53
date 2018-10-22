@@ -63,6 +63,7 @@ bool WebosResourceDelegate::GetLocalizedString(int message_id,
 }
 
 bool WebosResourceDelegate::LoadBrowserResources() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::FilePath path;
   PathService::Get(base::DIR_CBE_DATA, &path);
   base::FilePath resource_path =
@@ -75,6 +76,7 @@ bool WebosResourceDelegate::LoadBrowserResources() {
 
 // static
 void WebosResourceDelegate::InitializeResourceBundle() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebosResourceDelegate* resource_delegate = new WebosResourceDelegate();
   base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
   const std::string locale = command_line->GetSwitchValueASCII(switches::kLang);

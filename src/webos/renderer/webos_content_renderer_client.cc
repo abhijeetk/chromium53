@@ -36,6 +36,7 @@ using blink::WebURLResponse;
 namespace webos {
 
 void WebOSContentRendererClient::RenderThreadStarted() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
       switches::kEnableWatchdog)) {
     watchdog_ = new WebOSWatchdog();
@@ -73,12 +74,14 @@ void WebOSContentRendererClient::RenderThreadStarted() {
 
 void WebOSContentRendererClient::RenderViewCreated(
     content::RenderView* render_view) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   new WebOSRenderViewObserver(render_view);
 }
 
 bool WebOSContentRendererClient::ShouldSuppressErrorPage(
     content::RenderFrame* render_frame,
     const GURL& url) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (render_frame &&
       WebOsNetErrorHelper::Get(render_frame)->ShouldSuppressErrorPage(url)) {
     return true;
@@ -87,6 +90,7 @@ bool WebOSContentRendererClient::ShouldSuppressErrorPage(
 
 void WebOSContentRendererClient::RenderFrameCreated(
     content::RenderFrame* render_frame) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(USE_SPLASH_SCREEN)
   // Only attach WebOSPageLoadTimingRenderFrameObserver to the main frame, since
   // we only want to observe page load timing for the main frame.
@@ -99,12 +103,14 @@ void WebOSContentRendererClient::RenderFrameCreated(
 
 void WebOSContentRendererClient::AddSupportedKeySystems(
     std::vector<std::unique_ptr<media::KeySystemProperties>>* key_systems) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   cdm::AddWebOSKeySystems(key_systems);
 #endif
 }
 
 void WebOSContentRendererClient::ArmWatchdog() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   watchdog_->Arm();
   if (!watchdog_->WatchingThreadTid())
     watchdog_->SetWatchingThreadTid((long int)syscall(SYS_gettid));
@@ -126,6 +132,7 @@ void WebOSContentRendererClient::GetNavigationErrorStrings(
     const WebURLError& error,
     std::string* error_html,
     base::string16* error_description) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   const GURL failed_url = error.unreachableURL;
   bool is_post = base::EqualsASCII(
       base::StringPiece16(failed_request.httpMethod()), "POST");
@@ -144,6 +151,7 @@ void WebOSContentRendererClient::GetNavigationErrorStrings(
 
 bool WebOSContentRendererClient::HasErrorPage(int http_status_code,
                                               std::string* error_domain) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // Use an internal error page, if we have one for the status code.
   if (!error_page::LocalizedError::HasStrings(
           error_page::LocalizedError::kHttpErrorDomain, http_status_code)) {
@@ -157,7 +165,7 @@ bool WebOSContentRendererClient::HasErrorPage(int http_status_code,
 #if defined(OS_WEBOS)
 void  WebOSContentRendererClient::NotifyLocaleChanged(
     const std::string& new_locale) {
-
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::i18n::SetICUDefaultLocale(new_locale);
   if (ResourceBundle::HasSharedInstance()) {
     ResourceBundle::GetSharedInstance().ReloadLocaleResources(new_locale);

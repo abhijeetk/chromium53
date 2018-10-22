@@ -28,6 +28,7 @@ WebOSWidget::WebOSWidget(WebOSView* view)
       widget_view_(NULL),
       view_(view),
       theme_provider_(NULL) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   view_->set_widget(this);
   set_is_secondary_widget(false);
   // Don't focus anything on creation, selecting a tab will set the focus.
@@ -35,18 +36,21 @@ WebOSWidget::WebOSWidget(WebOSView* view)
 }
 
 WebOSWidget::~WebOSWidget() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (browser_command_handler_ && GetNativeView())
     GetNativeView()->RemovePreTargetHandler(browser_command_handler_.get());
 }
 
 // static
 const gfx::FontList& WebOSWidget::GetTitleFontList() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   static const gfx::FontList* title_font_list = new gfx::FontList();
   ANNOTATE_LEAKING_OBJECT_PTR(title_font_list);
   return *title_font_list;
 }
 
 void WebOSWidget::InitWebOSWidget(const gfx::Rect& rect, int surface_id) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   views::Widget::InitParams params;
   params.delegate = view_;
   params.native_widget = new WebOSNativeWidgetAura(this, view_);
@@ -77,6 +81,7 @@ views::View* WebOSWidget::GetFrameView() const {
 // WebOSWidget, views::Widget overrides:
 
 views::internal::RootView* WebOSWidget::CreateRootView() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (root_view_)
     delete root_view_;
 
@@ -85,6 +90,7 @@ views::internal::RootView* WebOSWidget::CreateRootView() {
 }
 
 views::NonClientFrameView* WebOSWidget::CreateNonClientFrameView() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (widget_view_)
     delete widget_view_;
 
@@ -94,23 +100,28 @@ views::NonClientFrameView* WebOSWidget::CreateNonClientFrameView() {
 
 bool WebOSWidget::GetAccelerator(int command_id,
                                  ui::Accelerator* accelerator) const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return view_->GetAccelerator(command_id, accelerator);
 }
 
 ui::ThemeProvider* WebOSWidget::GetThemeProvider() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return theme_provider_;
 }
 
 void WebOSWidget::SchedulePaintInRect(const gfx::Rect& rect) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   views::Widget::SchedulePaintInRect(rect);
 }
 
 void WebOSWidget::OnNativeWidgetActivationChanged(bool active) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (view_)
     view_->OnWidgetActivationChanged(this, active);
   Widget::OnNativeWidgetActivationChanged(active);
 }
 
 bool WebOSWidget::ShouldLeaveOffsetNearTopBorder() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return !IsMaximized();
 }

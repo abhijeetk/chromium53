@@ -43,6 +43,7 @@ class WebOSDevToolsServerSocketFactory
  public:
   WebOSDevToolsServerSocketFactory(int port) : port_(port) {}
   std::unique_ptr<net::ServerSocket> CreateForHttpServer() override {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
     std::unique_ptr<net::ServerSocket> socket(
         new net::TCPServerSocket(nullptr, net::NetLog::Source()));
     if (socket->ListenWithAddressAndPort("0.0.0.0", port_, kBackLog) != net::OK)
@@ -59,6 +60,7 @@ class WebOSDevToolsServerSocketFactory
 
 devtools_discovery::DevToolsTargetDescriptor::List
 WebOSDevToolsDiscoveryProvider::GetDescriptors() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   std::vector<scoped_refptr<content::DevToolsAgentHost>> wc_list =
       content::DevToolsAgentHost::GetOrCreateAll();
   devtools_discovery::DevToolsTargetDescriptor::List targets;
@@ -73,37 +75,45 @@ WebOSDevToolsDiscoveryProvider::GetDescriptors() {
 }
 
 WebOSDevToolsDelegate::WebOSDevToolsDelegate() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 WebOSDevToolsDelegate::~WebOSDevToolsDelegate() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 std::string WebOSDevToolsDelegate::GetDiscoveryPageHTML() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return ResourceBundle::GetSharedInstance().GetRawDataResource(
       IDR_WEBOS_INSPECTOR_DISCOVERY_PAGE).as_string();
 }
 
 std::string WebOSDevToolsDelegate::GetFrontendResource(
     const std::string& path) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return content::DevToolsFrontendHost::GetFrontendResource(path).as_string();
 }
 
 std::string WebOSDevToolsDelegate::GetPageThumbnailData(const GURL& url) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return "";
 }
 
 content::DevToolsExternalAgentProxyDelegate*
     WebOSDevToolsDelegate::HandleWebSocketConnection(const std::string& path) {
+      fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return nullptr;
 }
 
 base::DictionaryValue* WebOSDevToolsManagerDelegate::HandleCommand(
     content::DevToolsAgentHost*,
     base::DictionaryValue*) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return 0;
 }
 
 devtools_http_handler::DevToolsHttpHandler* initDevTools() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   int port;
 
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(

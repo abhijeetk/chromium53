@@ -18,6 +18,7 @@ using namespace ui;
 namespace webos {
 // Appends the source for i18n Templates in a script tag.
 void AppendI18nTemplateSourceHtml(std::string* output) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::StringPiece err_page_template(
       ResourceBundle::GetSharedInstance().GetRawDataResource(
           IDR_WEBOS_NETWORK_ERROR_PAGE_TEMPLATE_JS));
@@ -33,6 +34,7 @@ void AppendI18nTemplateSourceHtml(std::string* output) {
 }
 
 void AppendJsonJS(const base::DictionaryValue* json, std::string* output) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // Convert the template data to a json string.
   DCHECK(json) << "must include json data structure";
 
@@ -45,6 +47,7 @@ void AppendJsonJS(const base::DictionaryValue* json, std::string* output) {
 }
 
 void AppendJsonHtml(const base::DictionaryValue* json, std::string* output) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   std::string javascript_string;
   AppendJsonJS(json, &javascript_string);
 
@@ -63,6 +66,7 @@ std::string GetTemplatesHtml(const base::StringPiece& html_template,
                              const base::StringPiece& template_id,
                              int viewport_width,
                              int viewport_height) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   std::string output(html_template.data(), html_template.size());
 
   output.append("<script>");

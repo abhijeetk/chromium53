@@ -14,22 +14,22 @@
 
 namespace webos {
 
-void WebViewBase::SetFileAccessBlocked(bool blocked) {
+void WebViewBase::SetFileAccessBlocked(bool blocked) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebView::SetFileAccessBlocked(blocked);
 }
 
 WebViewBase::WebViewBase(int width, int height)
-    : m_webview(new WebView(width, height)) {}
+    : m_webview(new WebView(width, height)) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);}
 
 WebViewBase::~WebViewBase() {
   delete m_webview;
 }
 
-WebViewProfile* WebViewBase::GetProfile() const {
+WebViewProfile* WebViewBase::GetProfile() const {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return m_webview->GetProfile();
 }
 
-void WebViewBase::SetProfile(WebViewProfile* profile) {
+void WebViewBase::SetProfile(WebViewProfile* profile) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetProfile(profile);
 }
 
@@ -38,7 +38,7 @@ void WebViewBase::Initialize(const std::string& app_id,
                              const std::string& trust_level,
                              const std::string& v8_snapshot_path,
                              const std::string& v8_extra_flags,
-                             bool use_native_scroll) {
+                             bool use_native_scroll) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   SetAppPath(app_path);
   SetTrustLevel(trust_level);
 
@@ -63,117 +63,119 @@ void WebViewBase::Initialize(const std::string& app_id,
   SetAppId(app_id);
 }
 
-content::WebContents* WebViewBase::GetWebContents() {
+content::WebContents* WebViewBase::GetWebContents() {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return m_webview->GetWebContents();
 }
 
 void WebViewBase::AddUserStyleSheet(const std::string& sheet)
-{
+{fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->AddUserStyleSheet(sheet);
 }
 
-std::string WebViewBase::DefaultUserAgent() const {
+std::string WebViewBase::DefaultUserAgent() const {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return m_webview->DefaultUserAgent();
 }
 
-std::string WebViewBase::UserAgent() const {
+std::string WebViewBase::UserAgent() const {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return m_webview->UserAgent();
 }
 
-void WebViewBase::LoadUrl(const std::string& url) {
+void WebViewBase::LoadUrl(const std::string& url) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->LoadUrl(GURL(url));
 }
 
-void WebViewBase::StopLoading() {
+void WebViewBase::StopLoading() {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->StopLoading();
 }
 
-void WebViewBase::LoadExtension(const std::string& name) {
+void WebViewBase::LoadExtension(const std::string& name) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->LoadExtension(name);
 }
 
 void WebViewBase::ClearExtensions() {
-  m_webview->ClearExtensions();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->ClearExtensions();
 }
 
 void WebViewBase::EnableInspectablePage() {
-  GetWebContents()->EnableInspectable();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);GetWebContents()->EnableInspectable();
 }
 
 void WebViewBase::SetInspectable(bool enable) {
-  m_webview->SetInspectable(enable);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetInspectable(enable);
 }
 
 void WebViewBase::AddAvailablePluginDir(const std::string& directory) {
-  GetWebContents()->AddAvailablePluginDir(directory.c_str());
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);GetWebContents()->AddAvailablePluginDir(directory.c_str());
 }
 
 void WebViewBase::AddCustomPluginDir(const std::string& directory) {
-  m_webview->AddCustomPluginDir(directory);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->AddCustomPluginDir(directory);
 }
 
 void WebViewBase::SetUserAgent(const std::string& useragent) {
-  GetWebContents()->SetUserAgentOverride(useragent);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);GetWebContents()->SetUserAgentOverride(useragent);
 }
 
 void WebViewBase::SetBackgroundColor(int r, int g, int b, int alpha) {
-  m_webview->SetBackgroundColor(r, g, b, alpha);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetBackgroundColor(r, g, b, alpha);
 }
 
 void WebViewBase::SetAllowFakeBoldText(bool allowFakeBoldText) {
-  m_webview->SetAllowFakeBoldText(allowFakeBoldText);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetAllowFakeBoldText(allowFakeBoldText);
 }
 
 void WebViewBase::SetShouldSuppressDialogs(bool suppress) {
-  m_webview->SetShouldSuppressDialogs(suppress);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetShouldSuppressDialogs(suppress);
 }
 
 void WebViewBase::SetAppId(const std::string& appId) {
-  m_webview->SetAppId(appId);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetAppId(appId);
 }
 
 void WebViewBase::SetAcceptLanguages(const std::string& languages) {
-  m_webview->SetAcceptLanguages(languages);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetAcceptLanguages(languages);
 }
 
 void WebViewBase::SetUseLaunchOptimization(bool enabled) {
-  m_webview->SetUseLaunchOptimization(enabled);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetUseLaunchOptimization(enabled);
 }
 
 void WebViewBase::SetUseEnyoOptimization(bool enabled) {
-  m_webview->SetUseEnyoOptimization(enabled);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetUseEnyoOptimization(enabled);
 }
 
 void WebViewBase::SetUseAccessibility(bool enabled) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (enabled)
     GetWebContents()->EnableCompleteAccessibilityMode();
 }
 
 void WebViewBase::SetBlockWriteDiskcache(bool blocked) {
-  m_webview->SetBlockWriteDiskcache(blocked);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetBlockWriteDiskcache(blocked);
 }
 
 void WebViewBase::SetTransparentBackground(bool enable) {
-  m_webview->SetTransparentBackground(enable);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetTransparentBackground(enable);
 }
 
 void WebViewBase::SetBoardType(const std::string& boardType) {
-  m_webview->SetBoardType(boardType);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetBoardType(boardType);
 }
 
 void WebViewBase::SetMediaCodecCapability(const std::string& capability) {
-  m_webview->SetMediaCodecCapability(capability);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetMediaCodecCapability(capability);
 }
 
 void WebViewBase::SetSupportDolbyHDRContents(bool support) {
-  m_webview->SetSupportDolbyHDRContents(support);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetSupportDolbyHDRContents(support);
 }
 
 void WebViewBase::SetViewportSize(int width, int height) {
-  m_webview->SetViewportSize(width, height);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetViewportSize(width, height);
 }
 
 void WebViewBase::NotifyMemoryPressure(MemoryPressureLevel level) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   base::MemoryPressureListener::MemoryPressureLevel pressure_level =
       base::MemoryPressureListener::MEMORY_PRESSURE_LEVEL_NONE;
   if (level == MemoryPressureLevel::MEMORY_PRESSURE_LOW) {
@@ -188,28 +190,30 @@ void WebViewBase::NotifyMemoryPressure(MemoryPressureLevel level) {
 }
 
 void WebViewBase::SetVisible(bool visible) {
-  m_webview->SetVisible(visible);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetVisible(visible);
 }
 
 void WebViewBase::SetVisibilityState(WebPageVisibilityState visibilityState) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetVisibilityState(
       static_cast<blink::WebPageVisibilityState>(visibilityState));
 }
 
 void WebViewBase::DeleteWebStorages(const std::string& identifier) {
-  m_webview->DeleteWebStorages(identifier);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->DeleteWebStorages(identifier);
 }
 
 std::string WebViewBase::DocumentTitle() const {
-  return m_webview->DocumentTitle();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);return m_webview->DocumentTitle();
 }
 
 void WebViewBase::SuspendWebPageDOM() {
-  m_webview->SuspendDOM();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SuspendDOM();
 }
 
 void WebViewBase::ReplaceBaseURL(const std::string& newUrl,
                                  const std::string& oldUrl) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (newUrl == oldUrl)
     return;
 
@@ -217,225 +221,226 @@ void WebViewBase::ReplaceBaseURL(const std::string& newUrl,
 }
 
 void WebViewBase::ResumeWebPageDOM() {
-  m_webview->ResumeDOM();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->ResumeDOM();
 }
 
 void WebViewBase::SuspendWebPageMedia() {
-  m_webview->SuspendMedia();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SuspendMedia();
 }
 
 void WebViewBase::ResumeWebPageMedia() {
-  m_webview->ResumeMedia();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->ResumeMedia();
 }
 
 void WebViewBase::SuspendPaintingAndSetVisibilityHidden() {
-  m_webview->SuspendPaintingAndSetVisibilityHidden();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SuspendPaintingAndSetVisibilityHidden();
 }
 
 void WebViewBase::ResumePaintingAndSetVisibilityVisible() {
-  m_webview->ResumePaintingAndSetVisibilityVisible();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->ResumePaintingAndSetVisibilityVisible();
 }
 
 const std::string& WebViewBase::GetUrl() {
-  return m_webview->GetUrl();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);return m_webview->GetUrl();
 }
 
 void WebViewBase::RunJavaScript(const std::string& jsCode) {
-  m_webview->RunJavaScript(jsCode);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->RunJavaScript(jsCode);
 }
 
 void WebViewBase::RunJavaScriptInAllFrames(const std::string& jsCode) {
-  m_webview->RunJavaScriptInAllFrames(jsCode);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->RunJavaScriptInAllFrames(jsCode);
 }
 
 void WebViewBase::Reload() {
-  m_webview->Reload();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->Reload();
 }
 
 int WebViewBase::RenderProcessPid() const {
-  return m_webview->RenderProcessPid();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);return m_webview->RenderProcessPid();
 }
 
 void WebViewBase::SetFocus(bool focus) {
-  m_webview->SetFocus(focus);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetFocus(focus);
 }
 
 void WebViewBase::SetZoomFactor(double factor) {
-  m_webview->SetZoomFactor(factor);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetZoomFactor(factor);
 }
 
 void WebViewBase::SetDoNotTrack(bool dnt) {
-  m_webview->SetDoNotTrack(dnt);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetDoNotTrack(dnt);
 }
 
 void WebViewBase::ForwardWebOSEvent(WebOSEvent* event) {
-  m_webview->ForwardWebOSEvent(event);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->ForwardWebOSEvent(event);
 }
 
 bool WebViewBase::CanGoBack() const {
-  return m_webview->CanGoBack();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);return m_webview->CanGoBack();
 }
 
 void WebViewBase::RequestGetCookies(const std::string& url) {
-  m_webview->RequestGetCookies(url);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->RequestGetCookies(url);
 }
 
 bool WebViewBase::IsKeyboardVisible() {
-  return m_webview->IsKeyboardVisible();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);return m_webview->IsKeyboardVisible();
 }
 
 bool WebViewBase::IsInputMethodActive() {
-  return m_webview->IsInputMethodActive();
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);return m_webview->IsInputMethodActive();
 }
 
 void WebViewBase::SetHardwareResolution(int width, int height) {
-  m_webview->SetHardwareResolution(width, height);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetHardwareResolution(width, height);
 }
 
 void WebViewBase::SetEnableHtmlSystemKeyboardAttr(bool enable) {
-  m_webview->SetEnableHtmlSystemKeyboardAttr(enable);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->SetEnableHtmlSystemKeyboardAttr(enable);
 }
 
 void WebViewBase::DropAllPeerConnections(DropPeerConnectionReason reason) {
-  m_webview->DropAllPeerConnections(reason);
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);m_webview->DropAllPeerConnections(reason);
 }
 
 //WebPreferences
 void WebViewBase::SetAllowRunningInsecureContent(bool on) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::AllowRunningInsecureContent, on);
 }
 
-void WebViewBase::SetAllowScriptsToCloseWindows(bool on) {
+void WebViewBase::SetAllowScriptsToCloseWindows(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::AllowScriptsToCloseWindows, on);
 }
 
-void WebViewBase::SetAllowUniversalAccessFromFileUrls(bool on) {
+void WebViewBase::SetAllowUniversalAccessFromFileUrls(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::AllowUniversalAccessFromFileUrls, on);
 }
 
-void WebViewBase::SetSuppressesIncrementalRendering(bool on) {
+void WebViewBase::SetSuppressesIncrementalRendering(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::SuppressesIncrementalRendering, on);
 }
 
-void WebViewBase::SetDisallowScrollbarsInMainFrame(bool on) {
+void WebViewBase::SetDisallowScrollbarsInMainFrame(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::DisallowScrollbarsInMainFrame, on);
 }
 
-void WebViewBase::SetDisallowScrollingInMainFrame(bool on) {
+void WebViewBase::SetDisallowScrollingInMainFrame(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::DisallowScrollingInMainFrame, on);
 }
 
-void WebViewBase::SetJavascriptCanOpenWindows(bool on) {
+void WebViewBase::SetJavascriptCanOpenWindows(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::JavascriptCanOpenWindows, on);
 }
 
-void WebViewBase::SetSpatialNavigationEnabled(bool on) {
+void WebViewBase::SetSpatialNavigationEnabled(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::SpatialNavigationEnabled, on);
 }
 
-void WebViewBase::SetSupportsMultipleWindows(bool on) {
+void WebViewBase::SetSupportsMultipleWindows(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::SupportsMultipleWindows, on);
 }
 
-void WebViewBase::SetCSSNavigationEnabled(bool on) {
+void WebViewBase::SetCSSNavigationEnabled(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::CSSNavigationEnabled, on);
 }
 
-void WebViewBase::SetV8DateUseSystemLocaloffset(bool on) {
+void WebViewBase::SetV8DateUseSystemLocaloffset(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::V8DateUseSystemLocaloffset, on);
 }
 
-void WebViewBase::SetAllowLocalResourceLoad(bool on) {
+void WebViewBase::SetAllowLocalResourceLoad(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::AllowLocalResourceLoad, on);
 }
 
-void WebViewBase::SetLocalStorageEnabled(bool on) {
+void WebViewBase::SetLocalStorageEnabled(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::LocalStorageEnabled, on);
 }
 
-void WebViewBase::SetWebSecurityEnabled(bool on) {
+void WebViewBase::SetWebSecurityEnabled(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::WebSecurityEnabled, on);
 }
 
-void WebViewBase::SetFixedPositionCreatesStackingContext(bool on) {
+void WebViewBase::SetFixedPositionCreatesStackingContext(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::FixedPositionCreatesStackingContext, on);
 }
 
-void WebViewBase::SetKeepAliveWebApp(bool on) {
+void WebViewBase::SetKeepAliveWebApp(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::KeepAliveWebApp, on);
 }
 
-void WebViewBase::SetAdditionalFontFamilyEnabled(bool on) {
+void WebViewBase::SetAdditionalFontFamilyEnabled(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::AdditionalFontFamilyEnabled, on);
 }
 
-void WebViewBase::SetDatabaseIdentifier(const std::string& identifier) {
+void WebViewBase::SetDatabaseIdentifier(const std::string& identifier) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetDatabaseIdentifier(identifier);
 }
 
-void WebViewBase::SetBackHistoryAPIDisabled(const bool on) {
+void WebViewBase::SetBackHistoryAPIDisabled(const bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::BackHistoryAPIDisabled, on);
 }
 
-void WebViewBase::SetForceVideoTexture(bool on) {
+void WebViewBase::SetForceVideoTexture(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::ForceVideoTexture, on);
 }
 
-void WebViewBase::SetNotifyFMPDirectly(const bool on) {
+void WebViewBase::SetNotifyFMPDirectly(const bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::NotifyFMPDirectly, on);
 }
 
-void WebViewBase::SetNetworkStableTimeout(const double timeout) {
+void WebViewBase::SetNetworkStableTimeout(const double timeout) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferencesAttribute(
       WebView::Attribute::NetworkStableTimeout, timeout);
 }
 
 //FontFamily
-void WebViewBase::SetStandardFontFamily(const std::string& font) {
+void WebViewBase::SetStandardFontFamily(const std::string& font) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetFontFamily(WebView::FontFamily::StandardFont, font);
 }
 
-void WebViewBase::SetFixedFontFamily(const std::string& font) {
+void WebViewBase::SetFixedFontFamily(const std::string& font) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetFontFamily(WebView::FontFamily::FixedFont, font);
 }
 
-void WebViewBase::SetSerifFontFamily(const std::string& font) {
+void WebViewBase::SetSerifFontFamily(const std::string& font) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetFontFamily(WebView::FontFamily::SerifFont, font);
 }
 
-void WebViewBase::SetSansSerifFontFamily(const std::string& font) {
+void WebViewBase::SetSansSerifFontFamily(const std::string& font) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetFontFamily(WebView::FontFamily::SansSerifFont, font);
 }
 
-void WebViewBase::SetCursiveFontFamily(const std::string& font) {
+void WebViewBase::SetCursiveFontFamily(const std::string& font) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetFontFamily(WebView::FontFamily::CursiveFont, font);
 }
 
-void WebViewBase::SetFantasyFontFamily(const std::string& font) {
+void WebViewBase::SetFantasyFontFamily(const std::string& font) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetFontFamily(WebView::FontFamily::FantasyFont, font);
 }
 
-void WebViewBase::SetFontHinting(WebViewBase::FontRenderParams hinting) {
+void WebViewBase::SetFontHinting(WebViewBase::FontRenderParams hinting) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   switch (hinting) {
     case WebViewBase::FontRenderParams::HINTING_NONE :
       m_webview->SetFontHintingNone();
@@ -455,29 +460,29 @@ void WebViewBase::SetFontHinting(WebViewBase::FontRenderParams hinting) {
   }
 }
 
-void WebViewBase::UpdatePreferences() {
+void WebViewBase::UpdatePreferences() {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->UpdatePreferences();
 }
 
-void WebViewBase::SetAudioGuidanceOn(bool on) {
+void WebViewBase::SetAudioGuidanceOn(bool on) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetAudioGuidanceOn(on);
 }
 
-void WebViewBase::ResetStateToMarkNextPaintForContainer() {
+void WebViewBase::ResetStateToMarkNextPaintForContainer() {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(USE_SPLASH_SCREEN)
   m_webview->ResetStateToMarkNextPaintForContainer();
 #endif
 }
 
-void WebViewBase::SetTrustLevel(const std::string& trust_level) {
+void WebViewBase::SetTrustLevel(const std::string& trust_level) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetTrustLevel(trust_level);
 }
 
-void WebViewBase::SetAppPath(const std::string& app_path) {
+void WebViewBase::SetAppPath(const std::string& app_path) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetAppPath(app_path);
 }
 
-void WebViewBase::SetSSLCertErrorPolicy(SSLCertErrorPolicy policy) {
+void WebViewBase::SetSSLCertErrorPolicy(SSLCertErrorPolicy policy) {fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   m_webview->SetSSLCertErrorPolicy(policy);
 }
 

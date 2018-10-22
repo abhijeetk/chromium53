@@ -51,12 +51,15 @@ class WebOSQuotaPermissionContext : public content::QuotaPermissionContext {
   DISALLOW_COPY_AND_ASSIGN(WebOSQuotaPermissionContext);
 };
 
-WebOSQuotaPermissionContext::WebOSQuotaPermissionContext() {}
+WebOSQuotaPermissionContext::WebOSQuotaPermissionContext() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
+}
 
 void WebOSQuotaPermissionContext::RequestQuotaPermission(
     const content::StorageQuotaParams& params,
     int render_process_id,
     const PermissionCallback& callback) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if ((params.storage_type != storage::kStorageTypePersistent) ||
       !base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kEnableFileAPIDirectoriesAndSystem)) {
@@ -106,6 +109,7 @@ void WebOSContentBrowserClient::AllowCertificateError(
     bool expired_previous_decision,
     const base::Callback<void(bool)>& callback,
     content::CertificateRequestResultType* result) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // HCAP requirements: For SSL Certificate error, follows the policy settings
   if (web_contents && web_contents->GetDelegate()) {
     WebView* webView = static_cast<WebView*>(web_contents->GetDelegate());
@@ -277,6 +281,7 @@ void WebOSContentBrowserClient::SetUseNativeScroll(int child_process_id,
 }
 
 void WebOSContentBrowserClient::ResourceDispatcherHostCreated() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   resource_dispatcher_host_delegate_.reset(
       new WebOSResourceDispatcherHostDelegate);
   content::ResourceDispatcherHost::Get()->SetDelegate(
@@ -294,6 +299,7 @@ void WebOSContentBrowserClient::DidCreatePpapiPlugin(
 
 void WebOSContentBrowserClient::SetApplicationLocale(
     const std::string& locale) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (current_locale_ == locale)
     return;
 

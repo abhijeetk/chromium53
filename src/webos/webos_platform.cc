@@ -21,22 +21,27 @@ namespace webos {
 WebOSPlatform* WebOSPlatform::webos_platform_ = new WebOSPlatform;
 
 WebOSPlatform* WebOSPlatform::GetInstance() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return webos_platform_;
 }
 
 WebOSPlatform::WebOSPlatform() : input_pointer_(NULL) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   Runtime::GetInstance()->InitializePlatformDelegate(this);
 }
 
 WebOSPlatform::~WebOSPlatform() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 void WebOSPlatform::OnCursorVisibilityChanged(bool visible) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (input_pointer_)
     input_pointer_->OnCursorVisibilityChanged(visible);
 }
 
 void WebOSPlatform::OnNetworkStateChanged(bool is_connected) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   webos::NetworkChangeNotifierWebos* network_change_notifier =
       NetworkChangeNotifierFactoryWebos::GetInstance();
@@ -46,20 +51,24 @@ void WebOSPlatform::OnNetworkStateChanged(bool is_connected) {
 }
 
 void WebOSPlatform::OnLocaleInfoChanged(std::string language) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   std::string locale = webos::MapWebOsToChromeLocales(language);
   GetWebOSContentBrowserClient()->SetApplicationLocale(locale);
 }
 
 void WebOSPlatform::SetInputPointer(InputPointer* input_pointer) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   input_pointer_ = input_pointer;
 }
 
 InputPointer* WebOSPlatform::GetInputPointer() {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return input_pointer_;
 }
 
 void WebOSPlatform::SetInputRegion(unsigned handle,
                                    std::vector<gfx::Rect>region) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   ozonewayland::WaylandDisplay* display = ozonewayland::WaylandDisplay::GetInstance();
   ozonewayland::WaylandWindow* window = display->GetWindow(handle);
@@ -71,6 +80,7 @@ void WebOSPlatform::SetInputRegion(unsigned handle,
 }
 
 void WebOSPlatform::SetKeyMask(unsigned handle, webos::WebOSKeyMask keyMask) {
+  fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   ozonewayland::WaylandDisplay* display = ozonewayland::WaylandDisplay::GetInstance();
   ozonewayland::WaylandWindow* window = display->GetWindow(handle);

@@ -33,6 +33,7 @@ static const int kKeyboardHeightMargin = 20;
 static const int kKeyboardAnimationTime = 600;
 
 NativeWindowState ToNativeWindowState(ui::WidgetState state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   switch (state) {
     case ui::WidgetState::MINIMIZED:
       return NativeWindowState::NATIVE_WINDOW_MINIMIZED;
@@ -46,6 +47,7 @@ NativeWindowState ToNativeWindowState(ui::WidgetState state) {
 }
 
 ui::WidgetState ToWidgetState(NativeWindowState state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   switch (state) {
     case NativeWindowState::NATIVE_WINDOW_MINIMIZED:
       return ui::WidgetState::MINIMIZED;
@@ -80,6 +82,7 @@ WebAppWindow::WebAppWindow(const gfx::Rect& rect, int surface_id)
       cursor_visible_(false),
       allow_window_resize_(false),
       current_rotation_(-1) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSBrowserContextAdapter* browser_context =
       GetWebOSContentBrowserClient()
           ->GetMainParts()
@@ -103,6 +106,7 @@ WebAppWindow::WebAppWindow(const gfx::Rect& rect, int surface_id)
 }
 
 WebAppWindow::~WebAppWindow() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   display::Screen::GetScreen()->RemoveObserver(this);
   if (webos_view_) {
     webos_view_->SetNativeEventDelegate(0);
@@ -113,6 +117,7 @@ WebAppWindow::~WebAppWindow() {
 }
 
 void WebAppWindow::Show() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webos_view_ && web_contents_)
     Restore();
 
@@ -123,6 +128,7 @@ void WebAppWindow::Show() {
 }
 
 void WebAppWindow::Hide() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   if (host_)
     host_->WebAppWindowHidden();
@@ -130,28 +136,33 @@ void WebAppWindow::Hide() {
 }
 
 gfx::NativeWindow WebAppWindow::GetNativeWindow() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return webos_view_ ? webos_view_->GetNativeWindow() : NULL;
 }
 
 int WebAppWindow::DisplayWidth() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (display::Screen::GetScreen()->GetNumDisplays() > 0)
     return display::Screen::GetScreen()->GetPrimaryDisplay().bounds().width();
   return 0;
 }
 
 int WebAppWindow::DisplayHeight() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (display::Screen::GetScreen()->GetNumDisplays() > 0)
     return display::Screen::GetScreen()->GetPrimaryDisplay().bounds().height();
   return 0;
 }
 
 void WebAppWindow::AttachWebContents(content::WebContents* web_contents) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   web_contents_ = web_contents;
   if (webos_view_)
     webos_view_->AttachWebContents(web_contents);
 }
 
 void WebAppWindow::DetachWebContents() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   web_contents_ = 0;
   opacity_ = 1.f;
   key_mask_list_.clear();
@@ -163,10 +174,12 @@ void WebAppWindow::DetachWebContents() {
 }
 
 void WebAppWindow::SetDelegate(WebAppWindowDelegate* webapp_window_delegate) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_delegate_ = webapp_window_delegate;
 }
 
 void WebAppWindow::SetHost(views::DesktopWindowTreeHost* host) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   host_ = host;
   if (window_surface_id_ && host_)
     host_->SetWindowSurfaceId(window_surface_id_);
@@ -178,6 +191,7 @@ void WebAppWindow::SetHost(views::DesktopWindowTreeHost* host) {
 }
 
 bool WebAppWindow::Event(WebOSEvent* webos_event) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (webapp_window_delegate_)
     return webapp_window_delegate_->event(webos_event);
 
@@ -185,6 +199,7 @@ bool WebAppWindow::Event(WebOSEvent* webos_event) {
 }
 
 void WebAppWindow::SetWindowHostState(NativeWindowState state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   if (host_)
     host_->SetWindowHostState(ToWidgetState(state));
@@ -192,6 +207,7 @@ void WebAppWindow::SetWindowHostState(NativeWindowState state) {
 }
 
 void WebAppWindow::SetKeyMask(WebOSKeyMask key_mask, bool value) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   key_mask_list_[key_mask] = value;
 
   if (!host_)
@@ -204,6 +220,7 @@ void WebAppWindow::SetKeyMask(WebOSKeyMask key_mask, bool value) {
 
 void WebAppWindow::SetWindowProperty(const std::string& name,
                                      const std::string& value) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   window_property_list_[name] = value;
 
   if (!host_)
@@ -215,6 +232,7 @@ void WebAppWindow::SetWindowProperty(const std::string& name,
 }
 
 void WebAppWindow::SetWindowSurfaceId(int surface_id) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   window_surface_id_ = surface_id;
 
   if (!host_)
@@ -224,6 +242,7 @@ void WebAppWindow::SetWindowSurfaceId(int surface_id) {
 }
 
 void WebAppWindow::SetOpacity(float opacity) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   opacity_ = opacity;
 
   if (!host_)
@@ -233,6 +252,7 @@ void WebAppWindow::SetOpacity(float opacity) {
 }
 
 void WebAppWindow::CreateGroup(const ui::WindowGroupConfiguration& config) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!host_)
     return;
 
@@ -243,6 +263,7 @@ void WebAppWindow::CreateGroup(const ui::WindowGroupConfiguration& config) {
 
 void WebAppWindow::AttachToGroup(const std::string& group,
                                  const std::string& layer) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!host_)
     return;
 
@@ -252,6 +273,7 @@ void WebAppWindow::AttachToGroup(const std::string& group,
 }
 
 void WebAppWindow::FocusGroupOwner() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!host_)
     return;
 
@@ -261,6 +283,7 @@ void WebAppWindow::FocusGroupOwner() {
 }
 
 void WebAppWindow::FocusGroupLayer() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!host_)
     return;
 
@@ -270,6 +293,7 @@ void WebAppWindow::FocusGroupLayer() {
 }
 
 void WebAppWindow::DetachGroup() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!host_)
     return;
 
@@ -279,6 +303,7 @@ void WebAppWindow::DetachGroup() {
 }
 
 void WebAppWindow::Resize(int width, int height) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (rect_.width() != width || rect_.height() != height) {
     rect_.set_width(width);
     rect_.set_height(height);
@@ -291,6 +316,7 @@ void WebAppWindow::Resize(int width, int height) {
 }
 
 void WebAppWindow::SetUseVirtualKeyboard(bool enable) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webos_view_->SetImeEnabled(enable);
 }
 
@@ -298,11 +324,13 @@ void WebAppWindow::SetUseVirtualKeyboard(bool enable) {
 // WebAppWindow, WebOSNativeEventDelegate overrides:
 
 void WebAppWindow::CompositorBuffersSwapped() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSEvent webos_event(WebOSEvent::Type::Swap);
   Event(&webos_event);
 }
 
 void WebAppWindow::InputPanelHidden() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   viewport_shift_height_ = 0;
   UpdateViewportY();
 
@@ -315,6 +343,7 @@ void WebAppWindow::InputPanelHidden() {
 }
 
 void WebAppWindow::InputPanelShown() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   int input_panel_height = host_->GetInputMethod()->GetInputPanelRect().height();
   gfx::Rect caret_bounds = host_->GetInputMethod()->GetCaretBounds();
@@ -346,6 +375,7 @@ void WebAppWindow::InputPanelShown() {
 }
 
 void WebAppWindow::InputPanelRectChanged() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WEBOS)
   int input_panel_height = host_->GetInputMethod()->GetInputPanelRect().height();
   gfx::Rect caret_bounds = host_->GetInputMethod()->GetCaretBounds();
@@ -364,6 +394,7 @@ void WebAppWindow::InputPanelRectChanged() {
 }
 
 void WebAppWindow::UpdateViewportY() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   gfx::Rect bounds = web_contents_->GetContentNativeView()->bounds();
   web_contents_->GetContentNativeView()->SetBounds(gfx::Rect(
       bounds.x(), viewport_shift_height_, bounds.width(), bounds.height()));
@@ -373,6 +404,7 @@ void WebAppWindow::UpdateViewportY() {
 }
 
 void WebAppWindow::KeyboardEnter() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (keyboard_enter_)
     return;
 
@@ -383,6 +415,7 @@ void WebAppWindow::KeyboardEnter() {
 }
 
 void WebAppWindow::KeyboardLeave() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!keyboard_enter_)
     return;
 
@@ -393,6 +426,7 @@ void WebAppWindow::KeyboardLeave() {
 }
 
 void WebAppWindow::WindowHostClose() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (input_panel_visible_)
     InputPanelHidden();
 
@@ -401,11 +435,13 @@ void WebAppWindow::WindowHostClose() {
 }
 
 void WebAppWindow::WindowHostExposed() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSEvent webos_event(WebOSEvent::Type::Expose);
   Event(&webos_event);
 }
 
 void WebAppWindow::WindowHostStateChanged(ui::WidgetState new_state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // Do not compare new_state with window_host_state_
   // Just invoke Event() even though the state is not changed
   // For scenario of splash WAM needs this change
@@ -416,6 +452,7 @@ void WebAppWindow::WindowHostStateChanged(ui::WidgetState new_state) {
 }
 
 void WebAppWindow::WindowHostStateAboutToChange(ui::WidgetState state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   window_host_state_about_to_change_ = ToNativeWindowState(state);
 
   WebOSEvent webos_event(WebOSEvent::Type::WindowStateAboutToChange);
@@ -423,6 +460,7 @@ void WebAppWindow::WindowHostStateAboutToChange(ui::WidgetState state) {
 }
 
 void WebAppWindow::CursorVisibilityChange(bool visible) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   cursor_visible_ = visible;
   Runtime::GetInstance()->OnCursorVisibilityChanged(visible);
   aura::Window* window = static_cast<aura::Window*>(GetNativeWindow());
@@ -438,16 +476,20 @@ void WebAppWindow::CursorVisibilityChange(bool visible) {
 // WebAppWindow, display::DisplayObserver overrides:
 
 void WebAppWindow::OnDisplayAdded(const display::Display& new_display) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   current_rotation_ =
       display::Screen::GetScreen()->GetPrimaryDisplay().RotationAsDegree();
   ComputeScaleFactor();
 }
 
-void WebAppWindow::OnDisplayRemoved(const display::Display& old_display) {}
+void WebAppWindow::OnDisplayRemoved(const display::Display& old_display) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
+}
 
 void WebAppWindow::OnDisplayMetricsChanged(const display::Display& display,
                                            uint32_t metrics) {
   if (metrics & display::DisplayObserver::DISPLAY_METRIC_ROTATION) {
+      fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
     // Get new rotation from primary display
     int screen_rotation =
         display::Screen::GetScreen()->GetPrimaryDisplay().RotationAsDegree();
@@ -509,6 +551,7 @@ void WebAppWindow::OnDisplayMetricsChanged(const display::Display& display,
 // WebAppWindow, ui::EventHandler overrides:
 
 void WebAppWindow::OnMouseEvent(ui::MouseEvent* event) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   switch (event->type()) {
     case ui::EventType::ET_MOUSE_PRESSED:
       if (OnMousePressed(event->x(), event->y(), event->flags()))
@@ -548,6 +591,7 @@ void WebAppWindow::OnMouseEvent(ui::MouseEvent* event) {
 }
 
 void WebAppWindow::OnKeyEvent(ui::KeyEvent* event) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   CheckKeyFilter(event);
 
   switch (event->type()) {
@@ -565,6 +609,7 @@ void WebAppWindow::OnKeyEvent(ui::KeyEvent* event) {
 }
 
 void WebAppWindow::CheckKeyFilter(ui::KeyEvent* event) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   unsigned new_keycode;
   ui::DomCode code;
   unsigned modifier = 0;
@@ -577,6 +622,7 @@ void WebAppWindow::CheckKeyFilter(ui::KeyEvent* event) {
 }
 
 void WebAppWindow::CheckKeyFilterTable(unsigned keycode, unsigned& new_keycode, ui::DomCode& code, unsigned& modifier) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   new_keycode = 0;
   code = ui::DomCode::NONE;
 }
@@ -585,6 +631,7 @@ void WebAppWindow::CheckKeyFilterTable(unsigned keycode, unsigned& new_keycode, 
 // WebAppWindow, private:
 
 void WebAppWindow::Restore() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webos_view_ = new WebOSView(this);
   webos_view_->Init(browser_context_);
   webos_view_->SetNativeEventDelegate(this);
@@ -617,45 +664,54 @@ void WebAppWindow::Restore() {
 }
 
 void WebAppWindow::ComputeScaleFactor() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   scale_factor_ = static_cast<float>(DisplayHeight()) / rect_.height();
 }
 
 bool WebAppWindow::OnMousePressed(float x, float y, int flags) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSMouseEvent event(WebOSEvent::MouseButtonPress, x, y, flags);
   return Event(&event);
 }
 
 bool WebAppWindow::OnMouseReleased(float x, float y, int flags) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSMouseEvent event(WebOSEvent::Type::MouseButtonRelease, x, y, flags);
   return Event(&event);
 }
 
 bool WebAppWindow::OnMouseMoved(float x, float y) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSMouseEvent event(WebOSEvent::Type::MouseMove, x, y);
   return Event(&event);
 }
 
 bool WebAppWindow::OnMouseWheel(float x, float y, int x_offset, int y_offset) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSMouseWheelEvent event(WebOSEvent::Type::Wheel, x, y, x_offset, y_offset);
   return Event(&event);
 }
 
 bool WebAppWindow::OnMouseEntered(float x, float y) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSMouseEvent event(WebOSEvent::Type::Enter, x, y);
   return Event(&event);
 }
 
 bool WebAppWindow::OnMouseExited(float x, float y) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSMouseEvent event(WebOSEvent::Type::Leave, x, y);
   return Event(&event);
 }
 
 bool WebAppWindow::OnKeyPressed(unsigned keycode) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSKeyEvent event(WebOSEvent::Type::KeyPress, keycode);
   return Event(&event);
 }
 
 bool WebAppWindow::OnKeyReleased(unsigned keycode) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   WebOSKeyEvent event(WebOSKeyEvent::Type::KeyRelease, keycode);
   return Event(&event);
 }

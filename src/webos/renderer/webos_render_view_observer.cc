@@ -16,9 +16,11 @@ namespace webos {
 WebOSRenderViewObserver::WebOSRenderViewObserver(
     content::RenderView* render_view)
     : content::RenderViewObserver(render_view) {
+        fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 bool WebOSRenderViewObserver::OnMessageReceived(const IPC::Message& message) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(WebOSRenderViewObserver, message)
     IPC_MESSAGE_HANDLER(WebOSViewMsg_SetVisibilityState, OnSetVisibilityState)
@@ -32,6 +34,7 @@ bool WebOSRenderViewObserver::OnMessageReceived(const IPC::Message& message) {
 
 void WebOSRenderViewObserver::OnSetVisibilityState(
     blink::WebPageVisibilityState visibilityState) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   render_view()->GetWebView()->setVisibilityState(
       visibilityState,
       visibilityState ==
@@ -39,11 +42,13 @@ void WebOSRenderViewObserver::OnSetVisibilityState(
 }
 
 void WebOSRenderViewObserver::OnSetBackgroundColor(SkColor color) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   render_view()->GetWebFrameWidget()->
       setBaseBackgroundColor(static_cast<blink::WebColor>(color));
 }
 
 void WebOSRenderViewObserver::OnSetViewportSize(int width, int height) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   render_view()->GetWebView()->mainFrame()->setViewportSize(
       blink::WebSize(width, height));
 }
@@ -53,6 +58,7 @@ void WebOSRenderViewObserver::OnDestruct() {
 }
 
 void WebOSRenderViewObserver::DidClearWindowObject(blink::WebLocalFrame* frame) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   Send(new WebOSViewMsgHost_DidClearWindowObject(routing_id()));
 }
 

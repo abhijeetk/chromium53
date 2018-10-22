@@ -20,11 +20,14 @@ base::TimeDelta ClampDelta(double event, double start) {
 
 WebOSPageLoadTimingRenderFrameObserver::WebOSPageLoadTimingRenderFrameObserver(
     content::RenderFrame* render_frame)
-    : content::RenderFrameObserver(render_frame) {}
+    : content::RenderFrameObserver(render_frame) {
+        fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
+    }
 
 WebOSPageLoadTimingRenderFrameObserver::~WebOSPageLoadTimingRenderFrameObserver() {}
 
 void WebOSPageLoadTimingRenderFrameObserver::DidChangePerformanceTiming() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   // Check frame exists
   if(HasNoRenderFrame())
     return;
@@ -39,6 +42,7 @@ void WebOSPageLoadTimingRenderFrameObserver::DidChangePerformanceTiming() {
 
 void WebOSPageLoadTimingRenderFrameObserver::
     DidNonFirstMeaningPaintAfterLoad() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (HasNoRenderFrame())
     return;
 

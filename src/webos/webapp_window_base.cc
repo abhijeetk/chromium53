@@ -15,28 +15,35 @@ namespace webos {
 // WebAppWindowBase, public:
 
 WebAppWindowBase::WebAppWindowBase()
-    : pending_surface_id_(0) {}
+    : pending_surface_id_(0) {
+        fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
+    }
 
 WebAppWindowBase::~WebAppWindowBase() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->SetDelegate(NULL);
 }
 
 void WebAppWindowBase::InitWindow(int width, int height) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_ =
     std::unique_ptr<WebAppWindow>(new WebAppWindow(gfx::Rect(width, height), pending_surface_id_));
   webapp_window_->SetDelegate(this);
 }
 
 void WebAppWindowBase::Show() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->Show();
 }
 
 void WebAppWindowBase::Hide() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->Hide();
 }
 
 #if defined(OS_WEBOS)
 unsigned WebAppWindowBase::GetWindowHandle() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webapp_window_->host())
     return 0;
 
@@ -49,6 +56,7 @@ void WebAppWindowBase::SetCustomCursor(CustomCursorType type,
                                        const std::string& path,
                                        int hotspot_x,
                                        int hotspot_y) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webapp_window_->host())
     return;
 
@@ -57,22 +65,27 @@ void WebAppWindowBase::SetCustomCursor(CustomCursorType type,
 #endif
 
 int WebAppWindowBase::DisplayWidth() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return webapp_window_->DisplayWidth();
 }
 
 int WebAppWindowBase::DisplayHeight() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return webapp_window_->DisplayHeight();
 }
 
 void WebAppWindowBase::AttachWebContents(void* web_contents) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->AttachWebContents((content::WebContents*)web_contents);
 }
 
 void WebAppWindowBase::DetachWebContents() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->DetachWebContents();
 }
 
 void WebAppWindowBase::RecreatedWebContents() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webapp_window_->host())
     return;
 
@@ -82,27 +95,33 @@ void WebAppWindowBase::RecreatedWebContents() {
 }
 
 NativeWindowState WebAppWindowBase::GetWindowHostState() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return webapp_window_->GetWindowHostState();
 }
 
 NativeWindowState WebAppWindowBase::GetWindowHostStateAboutToChange() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return webapp_window_->GetWindowHostStateAboutToChange();
 }
 
 void WebAppWindowBase::SetWindowHostState(NativeWindowState state) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->SetWindowHostState(state);
 }
 
 void WebAppWindowBase::SetKeyMask(WebOSKeyMask key_mask, bool value) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->SetKeyMask(key_mask, value);
 }
 
 void WebAppWindowBase::SetWindowProperty(const std::string& name,
                                          const std::string& value) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->SetWindowProperty(name, value);
 }
 
 void WebAppWindowBase::SetWindowSurfaceId(int surface_id) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (webapp_window_)
     webapp_window_->SetWindowSurfaceId(surface_id);
   else
@@ -110,19 +129,23 @@ void WebAppWindowBase::SetWindowSurfaceId(int surface_id) {
 }
 
 void WebAppWindowBase::SetOpacity(float opacity) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->SetOpacity(opacity);
 }
 
 void WebAppWindowBase::Resize(int width, int height) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->Resize(width, height);
 }
 
 void WebAppWindowBase::SetUseVirtualKeyboard(bool enable) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->SetUseVirtualKeyboard(enable);
 }
 
 void WebAppWindowBase::CreateWindowGroup(
     const WindowGroupConfiguration& config) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   ui::WindowGroupConfiguration ui_config;
 
   ui_config.name = config.GetName();
@@ -139,23 +162,28 @@ void WebAppWindowBase::CreateWindowGroup(
 
 void WebAppWindowBase::AttachToWindowGroup(const std::string& group,
                                            const std::string& layer) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->AttachToGroup(group, layer);
 }
 
 void WebAppWindowBase::FocusWindowGroupOwner() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->FocusGroupOwner();
 }
 
 void WebAppWindowBase::FocusWindowGroupLayer() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->FocusGroupLayer();
 }
 
 void WebAppWindowBase::DetachWindowGroup() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   webapp_window_->DetachGroup();
 }
 
 #if defined(OS_WEBOS)
 void WebAppWindowBase::XInputActivate(const std::string& type) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webapp_window_->host())
     return;
 
@@ -163,6 +191,7 @@ void WebAppWindowBase::XInputActivate(const std::string& type) {
 }
 
 void WebAppWindowBase::XInputDeactivate() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webapp_window_->host())
     return;
 
@@ -172,6 +201,7 @@ void WebAppWindowBase::XInputDeactivate() {
 void WebAppWindowBase::XInputInvokeAction(uint32_t keysym,
                                           SpecialKeySymbolType symbol_type,
                                           XInputEventType event_type) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!webapp_window_->host())
     return;
 

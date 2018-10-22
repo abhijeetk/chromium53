@@ -35,12 +35,15 @@ WebOSWidgetView::WebOSWidgetView(WebOSWidget* widget,
                                  WebOSView* view)
     : widget_(widget),
       view_(view) {
+          fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 WebOSWidgetView::~WebOSWidgetView() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 gfx::Size WebOSWidgetView::GetMinimumSize() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   NOTIMPLEMENTED();
   return gfx::Size();
 }
@@ -49,15 +52,18 @@ gfx::Size WebOSWidgetView::GetMinimumSize() const {
 // WebOSWidgetView, views::NonClientFrameView implementation:
 
 gfx::Rect WebOSWidgetView::GetBoundsForClientView() const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return bounds();
 }
 
 gfx::Rect WebOSWidgetView::GetWindowBoundsForClientBounds(
     const gfx::Rect& client_bounds) const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return bounds();
 }
 
 int WebOSWidgetView::NonClientHitTest(const gfx::Point& point) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   if (!bounds().Contains(point))
     return HTNOWHERE;
 
@@ -79,6 +85,7 @@ int WebOSWidgetView::NonClientHitTest(const gfx::Point& point) {
 
 void WebOSWidgetView::GetWindowMask(const gfx::Size& size,
                                     gfx::Path* window_mask) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK(window_mask);
 
   if (widget()->IsFullscreen())
@@ -116,6 +123,7 @@ void WebOSWidgetView::GetAccessibleState(
 // WebOSWidgetView, views::View overrides:
 
 void WebOSWidgetView::OnPaint(gfx::Canvas* canvas) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,6 +132,7 @@ void WebOSWidgetView::OnPaint(gfx::Canvas* canvas) {
 // views::NonClientFrameView:
 bool WebOSWidgetView::DoesIntersectRect(const views::View* target,
                                         const gfx::Rect& rect) const {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   CHECK_EQ(target, this);
   return false;
 }

@@ -10,6 +10,7 @@ namespace webos {
 
 // static
 WebOSWebViewRendererState* WebOSWebViewRendererState::GetInstance() {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   return base::Singleton<WebOSWebViewRendererState>::get();
 }
 
@@ -21,6 +22,7 @@ void WebOSWebViewRendererState::RegisterWebViewInfo(
     int render_process_id,
     int routing_id,
     const WebViewInfo& webview_info) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
   RenderId render_id(render_process_id, routing_id);
   webview_info_map_[render_id] = webview_info;
@@ -28,6 +30,7 @@ void WebOSWebViewRendererState::RegisterWebViewInfo(
 
 void WebOSWebViewRendererState::UnRegisterWebViewInfo(int render_process_id,
                                                       int routing_id) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
   RenderId render_id(render_process_id, routing_id);
   webview_info_map_.erase(render_id);
@@ -36,6 +39,7 @@ void WebOSWebViewRendererState::UnRegisterWebViewInfo(int render_process_id,
 bool WebOSWebViewRendererState::GetInfo(int render_process_id,
                                         int routing_id,
                                         WebViewInfo* webview_info) {
+    fprintf(stderr, "[%d] %s %s %d\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
   RenderId render_id(render_process_id, routing_id);
   WebViewInfoMap::iterator iter = webview_info_map_.find(render_id);
