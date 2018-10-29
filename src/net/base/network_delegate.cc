@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include "net/base/network_delegate.h"
-
+#include <iostream>
 #include "base/logging.h"
 #include "base/profiler/scoped_tracker.h"
 #include "base/trace_event/trace_event.h"
@@ -11,6 +11,7 @@
 #include "net/base/net_errors.h"
 #include "net/proxy/proxy_info.h"
 #include "net/url_request/url_request.h"
+#include "net/http/http_response_headers.h"
 
 namespace net {
 
@@ -71,6 +72,7 @@ int NetworkDelegate::NotifyHeadersReceived(
   DCHECK(CalledOnValidThread());
   DCHECK(original_response_headers);
   DCHECK(!callback.is_null());
+  std::cout << std::endl << __FILE__ << __FUNCTION__<< __LINE__ <<  std::endl << original_response_headers->raw_headers() << std::endl;
   return OnHeadersReceived(request,
                            callback,
                            original_response_headers,

@@ -890,10 +890,11 @@ Error URLRequestJob::ReadRawDataHelper(IOBuffer* buf,
   raw_read_buffer_ = buf;
   Error error;
   ConvertResultToError(ReadRawData(buf, buf_size), &error, bytes_read);
-
+  fprintf(stderr, "NETWORK : [%d] %s %s %d error : [%d]\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, error);
   if (error != ERR_IO_PENDING) {
     // If the read completes synchronously, either success or failure, invoke
     // GatherRawReadStats so we can account for the completed read.
+    fprintf(stderr, "NETWORK : [%d] %s %s %d \n RESPONSE :\n %s\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, raw_read_buffer_->data());
     GatherRawReadStats(error, *bytes_read);
   }
   return error;
@@ -951,6 +952,8 @@ void URLRequestJob::RecordBytesRead(int bytes_read) {
            << " pre bytes read = " << bytes_read
            << " pre total = " << prefilter_bytes_read_
            << " post total = " << postfilter_bytes_read_;
+
+  fprintf(stderr, "\r\nNETWORK : [%d] %s %s %d URL : %s pre bytes read : %d  prefilter_bytes_read_ %d postfilter_bytes_read_ %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_->url().spec().data(), bytes_read, prefilter_bytes_read_, postfilter_bytes_read_);
   UpdatePacketReadTimes();  // Facilitate stats recording if it is active.
 
   // Notify observers if any additional network usage has occurred. Note that

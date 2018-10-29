@@ -508,7 +508,7 @@ void DocumentLoader::dataReceived(Resource* resource, const char* data, size_t l
     ASSERT_UNUSED(resource, resource == m_mainResource);
     ASSERT(!m_response.isNull());
     ASSERT(!m_frame->page()->defersLoading());
-
+    fprintf(stderr, "[%d] %s %s %d length [%d] : RENDER RECEIVED RESPONSE : \n %s\r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, length, data);
     if (m_inDataReceived) {
         // If this function is reentered, defer processing of the additional
         // data to the top-level invocation. Reentrant calls can occur because
