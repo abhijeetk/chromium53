@@ -685,16 +685,48 @@ base::TimeTicks ResourceDispatcher::ConsumeIOTimestamp() {
 // static
 bool ResourceDispatcher::IsResourceDispatcherMessage(
     const IPC::Message& message) {
+
+  base::PickleIterator iter(message);
+  int request_id = -1;
+  if (!iter.ReadInt(&request_id)) {
+    NOTREACHED() << "malformed resource message";
+  }
+
   switch (message.type()) {
     case ResourceMsg_UploadProgress::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_UploadProgress received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_ReceivedResponse::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_ReceivedResponse received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_ReceivedCachedMetadata::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_ReceivedCachedMetadata received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_ReceivedRedirect::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_ReceivedRedirect received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_SetDataBuffer::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_SetDataBuffer received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_InlinedDataChunkReceived::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_InlinedDataChunkReceived received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_DataReceived::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_DataReceived received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_DataDownloaded::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_DataDownloaded received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
+      return true;
+
     case ResourceMsg_RequestComplete::ID:
+      fprintf(stderr, "NETWORK : [%d] %s %s %d ResourceMsg_RequestComplete received for request %d \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_id);
       return true;
 
     default:
@@ -770,6 +802,7 @@ std::unique_ptr<ResourceRequest> ResourceDispatcher::CreateRequest(
   request->report_raw_headers = request_info.report_raw_headers;
   request->lofi_state = request_info.lofi_state;
 
+  fprintf(stderr, "\r\nNETWORK : [%d] %s %s %d URL : %s REFERRER : %s \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request_info.url.spec().data(), request_info.referrer.url.spec().data());
   if ((request_info.referrer.policy == blink::WebReferrerPolicyDefault ||
        request_info.referrer.policy ==
            blink::WebReferrerPolicyNoReferrerWhenDowngrade) &&

@@ -446,7 +446,7 @@ bool AsyncResourceHandler::OnReadCompleted(int bytes_read, bool* defer) {
     return true;
 
   buffer_->ShrinkLastAllocation(bytes_read);
-
+  fprintf(stderr, "\r\n URL : %s sent_data_buffer_msg_ : [%d] GetRequestID : [%d]\r\n", request()->url().spec().data(), sent_data_buffer_msg_, GetRequestID());
   if (!sent_data_buffer_msg_) {
     base::SharedMemoryHandle handle = base::SharedMemory::DuplicateHandle(
         buffer_->GetSharedMemory().handle());
@@ -534,6 +534,8 @@ void AsyncResourceHandler::OnResponseCompleted(
   info->filter()->Send(
       new ResourceMsg_RequestComplete(GetRequestID(), request_complete_data));
 
+  fprintf(stderr, "\r\n[%d] %s %s %d %s ResourceMsg_SetDataBuffer \r\n", (int)getpid(), __FILE__, __FUNCTION__, __LINE__, request()->url().spec().data());
+  fprintf(stderr, "\r\n URL : %s error_code : [%d] GetRequestID : [%d]\r\n", request()->url().spec().data(), error_code, GetRequestID());
   if (status.is_success())
     RecordHistogram();
 }
