@@ -83,6 +83,7 @@ void NotifyProcessKilled(const ChildProcessData& data, int exit_code) {
 BrowserChildProcessHost* BrowserChildProcessHost::Create(
     content::ProcessType process_type,
     BrowserChildProcessHostDelegate* delegate) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return new BrowserChildProcessHostImpl(
       process_type, delegate, mojo::edk::GenerateRandomToken());
 }
@@ -91,11 +92,13 @@ BrowserChildProcessHost* BrowserChildProcessHost::Create(
     content::ProcessType process_type,
     BrowserChildProcessHostDelegate* delegate,
     const std::string& mojo_child_token) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return new BrowserChildProcessHostImpl(
       process_type, delegate, mojo_child_token);
 }
 
 BrowserChildProcessHost* BrowserChildProcessHost::FromID(int child_process_id) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
   BrowserChildProcessHostImpl::BrowserChildProcessList* process_list =
       g_child_process_list.Pointer();
@@ -143,6 +146,7 @@ BrowserChildProcessHostImpl::BrowserChildProcessHostImpl(
       is_channel_connected_(false),
       notify_child_disconnected_(false),
       weak_factory_(this) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   data_.id = ChildProcessHostImpl::GenerateChildProcessUniqueId();
 
 #if USE_ATTACHMENT_BROKER
@@ -217,6 +221,7 @@ void BrowserChildProcessHostImpl::Launch(
     SandboxedProcessLauncherDelegate* delegate,
     base::CommandLine* cmd_line,
     bool terminate_on_shutdown) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
 
   GetContentClient()->browser()->AppendExtraCommandLineSwitches(
@@ -331,7 +336,7 @@ bool BrowserChildProcessHostImpl::OnMessageReceived(
 
 void BrowserChildProcessHostImpl::OnChannelConnected(int32_t peer_pid) {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   is_channel_connected_ = true;
   notify_child_disconnected_ = true;
 
@@ -354,15 +359,18 @@ void BrowserChildProcessHostImpl::OnChannelConnected(int32_t peer_pid) {
 }
 
 void BrowserChildProcessHostImpl::OnChannelError() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   delegate_->OnChannelError();
 }
 
 void BrowserChildProcessHostImpl::OnBadMessageReceived(
     const IPC::Message& message) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   TerminateOnBadMessageReceived(message.type());
 }
 
 void BrowserChildProcessHostImpl::TerminateOnBadMessageReceived(uint32_t type) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   HistogramBadMessageTerminated(data_.process_type);
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kDisableKillAfterBadIPC)) {
@@ -379,10 +387,12 @@ void BrowserChildProcessHostImpl::TerminateOnBadMessageReceived(uint32_t type) {
 }
 
 bool BrowserChildProcessHostImpl::CanShutdown() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return delegate_->CanShutdown();
 }
 
 void BrowserChildProcessHostImpl::OnChildDisconnected() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
 #if defined(OS_WIN)
   // OnChildDisconnected may be called without OnChannelConnected, so stop the
@@ -445,16 +455,19 @@ void BrowserChildProcessHostImpl::OnChildDisconnected() {
 }
 
 bool BrowserChildProcessHostImpl::Send(IPC::Message* message) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return child_process_host_->Send(message);
 }
 
 void BrowserChildProcessHostImpl::OnProcessLaunchFailed(int error_code) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   delegate_->OnProcessLaunchFailed(error_code);
   notify_child_disconnected_ = false;
   delete delegate_;  // Will delete us
 }
 
 void BrowserChildProcessHostImpl::OnProcessLaunched() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
 
   const base::Process& process = child_process_->GetProcess();
@@ -482,7 +495,7 @@ void BrowserChildProcessHostImpl::OnProcessLaunched() {
 
 bool BrowserChildProcessHostImpl::IsProcessLaunched() const {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return child_process_.get() && child_process_->GetProcess().IsValid();
 }
 
@@ -491,6 +504,7 @@ void BrowserChildProcessHostImpl::OnMojoError(
     base::WeakPtr<BrowserChildProcessHostImpl> process,
     scoped_refptr<base::SingleThreadTaskRunner> task_runner,
     const std::string& error) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (!task_runner->BelongsToCurrentThread()) {
     task_runner->PostTask(
         FROM_HERE, base::Bind(&BrowserChildProcessHostImpl::OnMojoError,
@@ -516,6 +530,7 @@ void BrowserChildProcessHostImpl::OnMojoError(
 #if defined(OS_WIN)
 
 void BrowserChildProcessHostImpl::OnObjectSignaled(HANDLE object) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   OnChildDisconnected();
 }
 

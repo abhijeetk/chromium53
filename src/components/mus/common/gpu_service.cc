@@ -39,6 +39,7 @@ GpuService::GpuService(shell::Connector* connector)
       establishing_condition_(&lock_) {
   DCHECK(main_task_runner_);
   DCHECK(connector_);
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   base::Thread::Options thread_options(base::MessageLoop::TYPE_IO, 0);
   thread_options.priority = base::ThreadPriority::NORMAL;
   CHECK(io_thread_.StartWithOptions(thread_options));
@@ -103,6 +104,7 @@ void GpuService::EstablishGpuChannel(const base::Closure& callback) {
 }
 
 scoped_refptr<gpu::GpuChannelHost> GpuService::EstablishGpuChannelSync() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   base::AutoLock auto_lock(lock_);
   if (GetGpuChannelLocked())
     return gpu_channel_;
@@ -121,6 +123,7 @@ scoped_refptr<gpu::GpuChannelHost> GpuService::EstablishGpuChannelSync() {
 
     // Wait until the pending establishing task is finished.
     do {
+      fprintf(stderr, "Waiting for establishing GPU channel %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
       establishing_condition_.Wait();
     } while (is_establishing_);
   }
@@ -143,6 +146,7 @@ scoped_refptr<gpu::GpuChannelHost> GpuService::GetGpuChannelLocked() {
 }
 
 void GpuService::EstablishGpuChannelOnMainThread() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   base::AutoLock auto_lock(lock_);
   DCHECK(IsMainThread());
 
@@ -165,6 +169,7 @@ void GpuService::EstablishGpuChannelOnMainThread() {
 }
 
 void GpuService::EstablishGpuChannelOnMainThreadSyncLocked() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(IsMainThread());
   DCHECK(is_establishing_);
 
@@ -185,6 +190,7 @@ void GpuService::EstablishGpuChannelOnMainThreadSyncLocked() {
     mojo::SyncCallRestrictions::ScopedAllowSyncCall allow_sync_call;
     if (!gpu_service_->EstablishGpuChannel(&client_id, &channel_handle,
                                            &gpu_info)) {
+      fprintf(stderr, "Channel encountered error while establishing gpu channel. %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
       DLOG(WARNING)
           << "Channel encountered error while establishing gpu channel.";
       return;
@@ -200,6 +206,7 @@ void GpuService::EstablishGpuChannelOnMainThreadDone(
     int client_id,
     mojom::ChannelHandlePtr channel_handle,
     mojom::GpuInfoPtr gpu_info) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(IsMainThread());
   scoped_refptr<gpu::GpuChannelHost> gpu_channel;
   if (client_id) {

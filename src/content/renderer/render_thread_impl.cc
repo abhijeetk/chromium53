@@ -637,7 +637,7 @@ RenderThreadImpl::RenderThreadImpl(
 void RenderThreadImpl::Init(
     scoped_refptr<base::SingleThreadTaskRunner>& resource_task_queue) {
   TRACE_EVENT0("startup", "RenderThreadImpl::Init");
-
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   base::trace_event::TraceLog::GetInstance()->SetThreadSortIndex(
       base::PlatformThread::CurrentId(),
       kTraceEventRendererMainThreadSortIndex);
@@ -1179,6 +1179,7 @@ void RenderThreadImpl::InitializeCompositorThread() {
 #if defined(OS_ANDROID)
   options.priority = base::ThreadPriority::DISPLAY;
 #endif
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   compositor_thread_.reset(new WebThreadForCompositor(options));
   blink_platform_impl_->SetCompositorThread(compositor_thread_.get());
   compositor_task_runner_ = compositor_thread_->GetTaskRunner();
@@ -1877,7 +1878,7 @@ void RenderThreadImpl::OnCreateNewView(const ViewMsg_New_Params& params) {
 scoped_refptr<gpu::GpuChannelHost> RenderThreadImpl::EstablishGpuChannelSync(
     CauseForGpuLaunch cause_for_gpu_launch) {
   TRACE_EVENT0("gpu", "RenderThreadImpl::EstablishGpuChannelSync");
-
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (gpu_channel_) {
     // Do nothing if we already have a GPU channel or are already
     // establishing one.
@@ -1921,6 +1922,7 @@ RenderThreadImpl::CreateCompositorOutputSurface(
     int routing_id,
     scoped_refptr<FrameSwapMessageQueue> frame_swap_message_queue,
     const GURL& url) {
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   const base::CommandLine& command_line =
       *base::CommandLine::ForCurrentProcess();
   if (command_line.HasSwitch(switches::kDisableGpuCompositing))
@@ -2201,10 +2203,12 @@ base::TaskRunner* RenderThreadImpl::GetWorkerTaskRunner() {
 
 scoped_refptr<ContextProviderCommandBuffer>
 RenderThreadImpl::SharedCompositorWorkerContextProvider() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(IsMainThread());
   // Try to reuse existing shared worker context provider.
   if (shared_worker_context_provider_) {
     // Note: If context is lost, delete reference after releasing the lock.
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     cc::ContextProvider::ScopedContextLock lock(
         shared_worker_context_provider_.get());
     if (shared_worker_context_provider_->ContextGL()
@@ -2215,6 +2219,7 @@ RenderThreadImpl::SharedCompositorWorkerContextProvider() {
   scoped_refptr<gpu::GpuChannelHost> gpu_channel_host(EstablishGpuChannelSync(
       CAUSE_FOR_GPU_LAUNCH_SHARED_WORKER_THREAD_CONTEXT));
   if (!gpu_channel_host) {
+      fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     shared_worker_context_provider_ = nullptr;
     return shared_worker_context_provider_;
   }
@@ -2225,7 +2230,7 @@ RenderThreadImpl::SharedCompositorWorkerContextProvider() {
     stream_id = gpu_channel_host->GenerateStreamID();
     stream_priority = gpu::GpuStreamPriority::LOW;
   }
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   bool support_locking = true;
   shared_worker_context_provider_ = CreateOffscreenContext(
       std::move(gpu_channel_host), gpu::SharedMemoryLimits(), support_locking,
@@ -2233,6 +2238,8 @@ RenderThreadImpl::SharedCompositorWorkerContextProvider() {
       stream_priority);
   if (!shared_worker_context_provider_->BindToCurrentThread())
     shared_worker_context_provider_ = nullptr;
+
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return shared_worker_context_provider_;
 }
 
@@ -2319,6 +2326,7 @@ RenderThreadImpl::PendingFrameCreate::~PendingFrameCreate() {
 }
 
 void RenderThreadImpl::PendingFrameCreate::OnConnectionError() {
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   size_t erased =
       RenderThreadImpl::current()->pending_frame_creates_.erase(routing_id_);
   DCHECK_EQ(1u, erased);

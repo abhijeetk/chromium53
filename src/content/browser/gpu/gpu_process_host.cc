@@ -551,7 +551,7 @@ bool GpuProcessHost::Init() {
   init_start_time_ = base::TimeTicks::Now();
 
   TRACE_EVENT_INSTANT0("gpu", "LaunchGpuProcess", TRACE_EVENT_SCOPE_THREAD);
-
+  fprintf(stderr, "LaunchGpuProcess  %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   std::string channel_id = process_->GetHost()->CreateChannel();
   if (channel_id.empty())
     return false;
@@ -601,6 +601,7 @@ void GpuProcessHost::RouteOnUIThread(const IPC::Message& message) {
 }
 
 bool GpuProcessHost::Send(IPC::Message* msg) {
+  fprintf(stderr, "sending msg  %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(CalledOnValidThread());
   if (process_->GetHost()->IsChannelOpening()) {
     queued_messages_.push(msg);
@@ -612,8 +613,10 @@ bool GpuProcessHost::Send(IPC::Message* msg) {
     // Channel is hosed, but we may not get destroyed for a while. Send
     // outstanding channel creation failures now so that the caller can restart
     // with a new process/channel without waiting.
+    fprintf(stderr, "Send failed  %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     SendOutstandingReplies();
   }
+  fprintf(stderr, "sending success  %s %s %d result : %d\n", __FILE__, __FUNCTION__, __LINE__, result);
   return result;
 }
 
@@ -657,6 +660,7 @@ bool GpuProcessHost::OnMessageReceived(const IPC::Message& message) {
 void GpuProcessHost::OnAcceleratedSurfaceCreatedChildWindow(
     gpu::SurfaceHandle parent_handle,
     gpu::SurfaceHandle window_handle) {
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (!in_process_) {
     DCHECK(process_);
     {
@@ -692,7 +696,7 @@ void GpuProcessHost::OnAcceleratedSurfaceCreatedChildWindow(
 
 void GpuProcessHost::OnChannelConnected(int32_t peer_pid) {
   TRACE_EVENT0("gpu", "GpuProcessHost::OnChannelConnected");
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   while (!queued_messages_.empty()) {
     Send(queued_messages_.front());
     queued_messages_.pop();
@@ -708,10 +712,11 @@ void GpuProcessHost::EstablishGpuChannel(
     const EstablishChannelCallback& callback) {
   DCHECK(CalledOnValidThread());
   TRACE_EVENT0("gpu", "GpuProcessHost::EstablishGpuChannel");
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   // If GPU features are already blacklisted, no need to establish the channel.
   if (!GpuDataManagerImpl::GetInstance()->GpuAccessAllowed(NULL)) {
     DVLOG(1) << "GPU blacklisted, refusing to open a GPU channel.";
+    fprintf(stderr, "GPU blacklisted, refusing to open a GPU channel %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     callback.Run(IPC::ChannelHandle(), gpu::GPUInfo());
     return;
   }
@@ -722,13 +727,16 @@ void GpuProcessHost::EstablishGpuChannel(
   params.preempts = preempts;
   params.allow_view_command_buffers = allow_view_command_buffers;
   params.allow_real_time_streams = allow_real_time_streams;
+  fprintf(stderr, "BROWSER=>GPU -> GpuMsg_EstablishChannel : %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (Send(new GpuMsg_EstablishChannel(params))) {
     EstablishChannelRequest request;
     request.client_id = client_id;
     request.callback = callback;
     channel_requests_.push(request);
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   } else {
     DVLOG(1) << "Failed to send GpuMsg_EstablishChannel.";
+    fprintf(stderr, "Failed to send GpuMsg_EstablishChannel : %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     callback.Run(IPC::ChannelHandle(), gpu::GPUInfo());
   }
 
@@ -747,7 +755,7 @@ void GpuProcessHost::CreateGpuMemoryBuffer(
     gpu::SurfaceHandle surface_handle,
     const CreateGpuMemoryBufferCallback& callback) {
   TRACE_EVENT0("gpu", "GpuProcessHost::CreateGpuMemoryBuffer");
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(CalledOnValidThread());
 
   GpuMsg_CreateGpuMemoryBuffer_Params params;
@@ -768,7 +776,7 @@ void GpuProcessHost::DestroyGpuMemoryBuffer(gfx::GpuMemoryBufferId id,
                                             int client_id,
                                             const gpu::SyncToken& sync_token) {
   TRACE_EVENT0("gpu", "GpuProcessHost::DestroyGpuMemoryBuffer");
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(CalledOnValidThread());
 
   Send(new GpuMsg_DestroyGpuMemoryBuffer(id, client_id, sync_token));
@@ -778,6 +786,7 @@ void GpuProcessHost::DestroyGpuMemoryBuffer(gfx::GpuMemoryBufferId id,
 void GpuProcessHost::SendDestroyingVideoSurface(int surface_id,
                                                 const base::Closure& done_cb) {
   TRACE_EVENT0("gpu", "GpuProcessHost::SendDestroyingVideoSurface");
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK(send_destroying_video_surface_done_cb_.is_null());
   DCHECK(!done_cb.is_null());
   if (Send(new GpuMsg_DestroyingVideoSurface(surface_id))) {
@@ -792,7 +801,7 @@ void GpuProcessHost::OnInitialized(bool result, const gpu::GPUInfo& gpu_info) {
   UMA_HISTOGRAM_BOOLEAN("GPU.GPUProcessInitialized", result);
   initialized_ = result;
   gpu_info_ = gpu_info;
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (!initialized_)
     GpuDataManagerImpl::GetInstance()->OnGpuProcessInitFailure();
   else if (!in_process_)
@@ -802,9 +811,10 @@ void GpuProcessHost::OnInitialized(bool result, const gpu::GPUInfo& gpu_info) {
 void GpuProcessHost::OnChannelEstablished(
     const IPC::ChannelHandle& channel_handle) {
   TRACE_EVENT0("gpu", "GpuProcessHost::OnChannelEstablished");
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (channel_requests_.empty()) {
     // This happens when GPU process is compromised.
+    fprintf(stderr, "Received(from GPU) a ChannelEstablished message but no requests in queue. %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     RouteOnUIThread(GpuHostMsg_OnLogMessage(
         logging::LOG_WARNING, "WARNING",
         "Received a ChannelEstablished message but no requests in queue."));
@@ -815,8 +825,10 @@ void GpuProcessHost::OnChannelEstablished(
 
   // Currently if any of the GPU features are blacklisted, we don't establish a
   // GPU channel.
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (!channel_handle.name.empty() &&
       !GpuDataManagerImpl::GetInstance()->GpuAccessAllowed(NULL)) {
+    fprintf(stderr, "Hardware acceleration is unavailable. %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
     Send(new GpuMsg_CloseChannel(request.client_id));
     request.callback.Run(IPC::ChannelHandle(), gpu::GPUInfo());
     RouteOnUIThread(
@@ -824,14 +836,14 @@ void GpuProcessHost::OnChannelEstablished(
                                 "Hardware acceleration is unavailable."));
     return;
   }
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   request.callback.Run(channel_handle, gpu_info_);
 }
 
 void GpuProcessHost::OnGpuMemoryBufferCreated(
     const gfx::GpuMemoryBufferHandle& handle) {
   TRACE_EVENT0("gpu", "GpuProcessHost::OnGpuMemoryBufferCreated");
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (create_gpu_memory_buffer_requests_.empty())
     return;
 
@@ -915,16 +927,19 @@ void GpuProcessHost::OnFieldTrialActivated(const std::string& trial_name) {
 }
 
 void GpuProcessHost::OnProcessLaunched() {
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   UMA_HISTOGRAM_TIMES("GPU.GPUProcessLaunchTime",
                       base::TimeTicks::Now() - init_start_time_);
 }
 
 void GpuProcessHost::OnProcessLaunchFailed(int error_code) {
+    fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   // TODO(wfh): do something more useful with this error code.
   RecordProcessCrash();
 }
 
 void GpuProcessHost::OnProcessCrashed(int exit_code) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   SendOutstandingReplies();
   RecordProcessCrash();
   GpuDataManagerImpl::GetInstance()->ProcessCrashed(
@@ -958,6 +973,7 @@ void GpuProcessHost::StopGpuProcess() {
 
 bool GpuProcessHost::LaunchGpuProcess(const std::string& channel_id,
                                       gpu::GpuPreferences* gpu_preferences) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (!(gpu_enabled_ &&
       GpuDataManagerImpl::GetInstance()->ShouldUseSwiftShader()) &&
       !hardware_gpu_enabled_) {

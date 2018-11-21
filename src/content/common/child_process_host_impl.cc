@@ -56,6 +56,7 @@ uint64_t ChildProcessHost::kBrowserTracingProcessId =
 
 // static
 ChildProcessHost* ChildProcessHost::Create(ChildProcessHostDelegate* delegate) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return new ChildProcessHostImpl(delegate);
 }
 
@@ -86,6 +87,7 @@ base::FilePath ChildProcessHost::GetChildPath(int flags) {
 ChildProcessHostImpl::ChildProcessHostImpl(ChildProcessHostDelegate* delegate)
     : delegate_(delegate),
       opening_channel_(false) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WIN)
   AddFilter(new FontCacheDispatcher());
 #endif
@@ -198,6 +200,7 @@ bool ChildProcessHostImpl::Send(IPC::Message* message) {
     delete message;
     return false;
   }
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return channel_->Send(message);
 }
 
@@ -247,6 +250,7 @@ uint64_t ChildProcessHostImpl::ChildProcessUniqueIdToTracingProcessId(
 }
 
 bool ChildProcessHostImpl::OnMessageReceived(const IPC::Message& msg) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 #ifdef IPC_MESSAGE_LOG_ENABLED
   IPC::Logging* logger = IPC::Logging::GetInstance();
   if (msg.type() == IPC_LOGGING_ID) {
@@ -296,6 +300,7 @@ bool ChildProcessHostImpl::OnMessageReceived(const IPC::Message& msg) {
 }
 
 void ChildProcessHostImpl::OnChannelConnected(int32_t peer_pid) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (!peer_process_.IsValid()) {
     peer_process_ = base::Process::OpenWithExtraPrivileges(peer_pid);
     if (!peer_process_.IsValid())
@@ -309,6 +314,7 @@ void ChildProcessHostImpl::OnChannelConnected(int32_t peer_pid) {
 }
 
 void ChildProcessHostImpl::OnChannelError() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   opening_channel_ = false;
   delegate_->OnChannelError();
 
@@ -320,16 +326,19 @@ void ChildProcessHostImpl::OnChannelError() {
 }
 
 void ChildProcessHostImpl::OnBadMessageReceived(const IPC::Message& message) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   delegate_->OnBadMessageReceived(message);
 }
 
 void ChildProcessHostImpl::OnAllocateSharedMemory(
     uint32_t buffer_size,
     base::SharedMemoryHandle* handle) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   AllocateSharedMemory(buffer_size, peer_process_.Handle(), handle);
 }
 
 void ChildProcessHostImpl::OnShutdownRequest() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (delegate_->CanShutdown())
     Send(new ChildProcessMsg_Shutdown());
 }
@@ -341,6 +350,7 @@ void ChildProcessHostImpl::OnAllocateGpuMemoryBuffer(
     gfx::BufferFormat format,
     gfx::BufferUsage usage,
     gfx::GpuMemoryBufferHandle* handle) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   // TODO(reveman): Add support for other types of GpuMemoryBuffers.
 
   // AllocateForChildProcess() will check if |width| and |height| are valid

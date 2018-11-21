@@ -446,7 +446,7 @@ bool AsyncResourceHandler::OnReadCompleted(int bytes_read, bool* defer) {
     return true;
 
   buffer_->ShrinkLastAllocation(bytes_read);
-
+  fprintf(stderr, "\r\n URL : %s sent_data_buffer_msg_ : [%d] GetRequestID : [%d]\r\n", request()->url().spec().data(), sent_data_buffer_msg_, GetRequestID());
   if (!sent_data_buffer_msg_) {
     base::SharedMemoryHandle handle = base::SharedMemory::DuplicateHandle(
         buffer_->GetSharedMemory().handle());
