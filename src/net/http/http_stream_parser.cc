@@ -25,6 +25,8 @@
 #include "net/socket/client_socket_handle.h"
 #include "net/socket/ssl_client_socket.h"
 #include "net/ssl/token_binding.h"
+#include <iostream>
+using namespace std;
 
 namespace net {
 
@@ -679,8 +681,13 @@ int HttpStreamParser::DoReadBody() {
     return 0;
 
   DCHECK_EQ(0, read_buf_->offset());
-  return connection_->socket()
+  int res = connection_->socket()
       ->Read(user_read_buf_.get(), user_read_buf_len_, io_callback_);
+#if 0
+  if (user_read_buf_)
+      std::cout << "user_read_buf_ :" << user_read_buf_->data() << std::endl;
+#endif
+  return res;
 }
 
 int HttpStreamParser::DoReadBodyComplete(int result) {

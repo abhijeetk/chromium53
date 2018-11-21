@@ -127,6 +127,7 @@ std::unique_ptr<GpuChannel> GpuChannelManager::CreateGpuChannel(
     bool preempts,
     bool allow_view_command_buffers,
     bool allow_real_time_streams) {
+  fprintf(stderr, " %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return base::WrapUnique(
       new GpuChannel(this, sync_point_manager(), watchdog_, share_group(),
                      mailbox_manager(), preempts ? preemption_flag() : nullptr,
@@ -141,6 +142,7 @@ IPC::ChannelHandle GpuChannelManager::EstablishChannel(
     bool preempts,
     bool allow_view_command_buffers,
     bool allow_real_time_streams) {
+  fprintf(stderr, " %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   std::unique_ptr<GpuChannel> channel(
       CreateGpuChannel(client_id, client_tracing_id, preempts,
                        allow_view_command_buffers, allow_real_time_streams));

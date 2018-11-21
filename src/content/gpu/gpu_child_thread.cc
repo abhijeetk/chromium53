@@ -163,6 +163,7 @@ GpuChildThread::GpuChildThread(
 #if defined(OS_WIN)
   target_services_ = NULL;
 #endif
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__); 
   g_thread_safe_sender.Get() = thread_safe_sender();
   g_lazy_tls.Pointer()->Set(this);
 }
@@ -180,6 +181,7 @@ GpuChildThread::GpuChildThread(
       dead_on_arrival_(false),
       in_browser_process_(true),
       gpu_memory_buffer_factory_(gpu_memory_buffer_factory) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_WIN)
   target_services_ = NULL;
 #endif
@@ -204,13 +206,14 @@ GpuChildThread::~GpuChildThread() {
 }
 
 void GpuChildThread::Shutdown() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   ChildThreadImpl::Shutdown();
   logging::SetLogMessageHandler(NULL);
 }
 
 void GpuChildThread::Init(const base::Time& process_start_time) {
   process_start_time_ = process_start_time;
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 #if defined(OS_ANDROID)
   // When running in in-process mode, this has been set in the browser at
   // ChromeBrowserMainPartsAndroid::PreMainMessageLoopRun().
@@ -227,6 +230,7 @@ void GpuChildThread::Init(const base::Time& process_start_time) {
 
 void GpuChildThread::OnFieldTrialGroupFinalized(const std::string& trial_name,
                                                 const std::string& group_name) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_FieldTrialActivated(trial_name));
 }
 
@@ -234,12 +238,42 @@ bool GpuChildThread::Send(IPC::Message* msg) {
   // The GPU process must never send a synchronous IPC message to the browser
   // process. This could result in deadlock.
   DCHECK(!msg->is_sync());
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   return ChildThreadImpl::Send(msg);
 }
 
 bool GpuChildThread::OnControlMessageReceived(const IPC::Message& msg) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   bool handled = true;
+  switch (msg.type()) {
+    case GpuMsg_Initialize::ID:
+      fprintf(stderr, "GpuMsg_Initialize %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_Finalize::ID:
+      fprintf(stderr, "GpuMsg_Finalize %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_CollectGraphicsInfo::ID:
+      fprintf(stderr, "GpuMsg_CollectGraphicsInfo %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_GetVideoMemoryUsageStats::ID:
+      fprintf(stderr, "GpuMsg_GetVideoMemoryUsageStats %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_Clean::ID:
+      fprintf(stderr, "GpuMsg_Clean %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break;     
+    case GpuMsg_Crash::ID:
+      fprintf(stderr, "GpuMsg_Crash %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break;  
+    case GpuMsg_Hang::ID:
+      fprintf(stderr, "GpuMsg_Hang %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break;  
+    case GpuMsg_DisableWatchdog::ID:
+      fprintf(stderr, "GpuMsg_DisableWatchdog %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break;  
+    case GpuMsg_GpuSwitched::ID:
+      fprintf(stderr, "GpuMsg_GpuSwitched %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break;       
+  }
   IPC_BEGIN_MESSAGE_MAP(GpuChildThread, msg)
     IPC_MESSAGE_HANDLER(GpuMsg_Initialize, OnInitialize)
     IPC_MESSAGE_HANDLER(GpuMsg_Finalize, OnFinalize)
@@ -268,6 +302,30 @@ bool GpuChildThread::OnControlMessageReceived(const IPC::Message& msg) {
 }
 
 bool GpuChildThread::OnMessageReceived(const IPC::Message& msg) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+  switch (msg.type()) {
+    case GpuMsg_EstablishChannel::ID:
+      fprintf(stderr, "GpuMsg_EstablishChannel %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_CloseChannel::ID:
+      fprintf(stderr, "GpuMsg_CloseChannel %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_DestroyGpuMemoryBuffer::ID:
+      fprintf(stderr, "GpuMsg_DestroyGpuMemoryBuffer %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_LoadedShader::ID:
+      fprintf(stderr, "GpuMsg_LoadedShader %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+#if 0
+    case GpuMsg_WakeUpGpu::ID:
+      fprintf(stderr, "GpuMsg_WakeUpGpu %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break; 
+    case GpuMsg_DestroyingVideoSurface::ID:
+      fprintf(stderr, "GpuMsg_DestroyingVideoSurface %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
+      break;
+#endif          
+  }
+
   if (ChildThreadImpl::OnMessageReceived(msg))
     return true;
 
@@ -293,6 +351,7 @@ bool GpuChildThread::OnMessageReceived(const IPC::Message& msg) {
 bool GpuChildThread::AcceptConnection(shell::Connection* connection) {
   // Use of base::Unretained(this) is safe here because |service_registry()|
   // will be destroyed before GpuChildThread is destructed.
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   connection->GetInterfaceRegistry()->AddInterface(base::Bind(
       &GpuChildThread::BindProcessControlRequest, base::Unretained(this)));
 
@@ -326,25 +385,30 @@ void GpuChildThread::SetActiveURL(const GURL& url) {
 }
 
 void GpuChildThread::DidCreateOffscreenContext(const GURL& active_url) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_DidCreateOffscreenContext(active_url));
 }
 
 void GpuChildThread::DidDestroyChannel(int client_id) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   media_service_->RemoveChannel(client_id);
   Send(new GpuHostMsg_DestroyChannel(client_id));
 }
 
 void GpuChildThread::DidDestroyOffscreenContext(const GURL& active_url) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_DidDestroyOffscreenContext(active_url));
 }
 
 void GpuChildThread::DidLoseContext(bool offscreen,
                                     gpu::error::ContextLostReason reason,
                                     const GURL& active_url) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_DidLoseContext(offscreen, reason, active_url));
 }
 
 void GpuChildThread::GpuMemoryUmaStats(const gpu::GPUMemoryUmaStats& params) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_GpuMemoryUmaStats(params));
 }
 
@@ -352,6 +416,7 @@ void GpuChildThread::GpuMemoryUmaStats(const gpu::GPUMemoryUmaStats& params) {
 void GpuChildThread::SendAcceleratedSurfaceCreatedChildWindow(
     gpu::SurfaceHandle parent_window,
     gpu::SurfaceHandle child_window) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_AcceleratedSurfaceCreatedChildWindow(parent_window,
                                                            child_window));
 }
@@ -360,13 +425,14 @@ void GpuChildThread::SendAcceleratedSurfaceCreatedChildWindow(
 void GpuChildThread::StoreShaderToDisk(int32_t client_id,
                                        const std::string& key,
                                        const std::string& shader) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   Send(new GpuHostMsg_CacheShader(client_id, key, shader));
 }
 
 void GpuChildThread::OnInitialize(const gpu::GpuPreferences& gpu_preferences) {
   if (!resume_interface_bindings_callback_.is_null())
     base::ResetAndReturn(&resume_interface_bindings_callback_).Run();
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   gpu_preferences_ = gpu_preferences;
 
   gpu_info_.video_decode_accelerator_capabilities =
@@ -429,10 +495,12 @@ void GpuChildThread::OnInitialize(const gpu::GpuPreferences& gpu_preferences) {
 
 void GpuChildThread::OnFinalize() {
   // Quit the GPU process
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   base::MessageLoop::current()->QuitWhenIdle();
 }
 
 void GpuChildThread::StopWatchdog() {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (watchdog_thread_.get()) {
     watchdog_thread_->Stop();
   }
@@ -455,10 +523,12 @@ void GpuChildThread::OnCollectGraphicsInfo() {
   switch (result) {
     case gpu::kCollectInfoFatalFailure:
       LOG(ERROR) << "gpu::CollectGraphicsInfo failed (fatal).";
+      fprintf(stderr, "gpu::CollectGraphicsInfo failed (fatal). %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
       // TODO(piman): can we signal overall failure?
       break;
     case gpu::kCollectInfoNonFatalFailure:
       DVLOG(1) << "gpu::CollectGraphicsInfo failed (non-fatal).";
+      fprintf(stderr, "gpu::CollectGraphicsInfo failed (non-fatal). %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
       break;
     case gpu::kCollectInfoNone:
       NOTREACHED();
@@ -497,12 +567,14 @@ void GpuChildThread::OnGetVideoMemoryUsageStats() {
 
 void GpuChildThread::OnClean() {
   DVLOG(1) << "GPU: Removing all contexts";
+  fprintf(stderr, "GPU: Removing all contexts %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (gpu_channel_manager_)
     gpu_channel_manager_->DestroyAllChannels();
 }
 
 void GpuChildThread::OnCrash() {
   DVLOG(1) << "GPU: Simulating GPU crash";
+  fprintf(stderr, "GPU: Simulating GPU crash %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   // Good bye, cruel world.
   volatile int* it_s_the_end_of_the_world_as_we_know_it = NULL;
   *it_s_the_end_of_the_world_as_we_know_it = 0xdead;
@@ -510,6 +582,7 @@ void GpuChildThread::OnCrash() {
 
 void GpuChildThread::OnHang() {
   DVLOG(1) << "GPU: Simulating GPU hang";
+  fprintf(stderr, "GPU: Simulating GPU hang %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   for (;;) {
     // Do not sleep here. The GPU watchdog timer tracks the amount of user
     // time this thread is using and it doesn't use much while calling Sleep.
@@ -518,6 +591,7 @@ void GpuChildThread::OnHang() {
 
 void GpuChildThread::OnDisableWatchdog() {
   DVLOG(1) << "GPU: Disabling watchdog thread";
+  fprintf(stderr, "GPU: Disabling watchdog thread %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (watchdog_thread_.get()) {
     // Disarm the watchdog before shutting down the message loop. This prevents
     // the future posting of tasks to the message loop.
@@ -530,6 +604,7 @@ void GpuChildThread::OnDisableWatchdog() {
 
 void GpuChildThread::OnGpuSwitched() {
   DVLOG(1) << "GPU: GPU has switched";
+  fprintf(stderr, "GPU: GPU has switched %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   // Notify observers in the GPU process.
   if (!in_browser_process_)
     ui::GpuSwitchingManager::GetInstance()->NotifyGpuSwitched();
@@ -538,7 +613,7 @@ void GpuChildThread::OnGpuSwitched() {
 void GpuChildThread::OnEstablishChannel(const EstablishChannelParams& params) {
   if (!gpu_channel_manager_)
     return;
-
+  fprintf(stderr, " Sending from GPU to BROWSER : %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   IPC::ChannelHandle channel_handle = gpu_channel_manager_->EstablishChannel(
       params.client_id, params.client_tracing_id, params.preempts,
       params.allow_view_command_buffers, params.allow_real_time_streams);

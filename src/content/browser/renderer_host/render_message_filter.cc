@@ -147,7 +147,7 @@ RenderMessageFilter::RenderMessageFilter(
       cache_storage_context_(cache_storage_context),
       weak_ptr_factory_(this) {
   DCHECK(request_context_.get());
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   if (render_widget_helper)
     render_widget_helper_->Init(render_process_id_, resource_dispatcher_host_);
 }
@@ -251,7 +251,7 @@ void RenderMessageFilter::OnCreateWindow(
     const ViewHostMsg_CreateWindow_Params& params,
     ViewHostMsg_CreateWindow_Reply* reply) {
   bool no_javascript_access;
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   bool can_create_window =
       GetContentClient()->browser()->CanCreateWindow(
           params.opener_url,
@@ -293,11 +293,13 @@ void RenderMessageFilter::OnCreateWindow(
 void RenderMessageFilter::OnCreateWidget(int opener_id,
                                          blink::WebPopupType popup_type,
                                          int* route_id) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   render_widget_helper_->CreateNewWidget(opener_id, popup_type, route_id);
 }
 
 void RenderMessageFilter::OnCreateFullscreenWidget(int opener_id,
                                                    int* route_id) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   render_widget_helper_->CreateNewFullscreenWidget(opener_id, route_id);
 }
 
@@ -657,6 +659,7 @@ void RenderMessageFilter::GpuMemoryBufferAllocated(
 void RenderMessageFilter::OnEstablishGpuChannel(
     CauseForGpuLaunch cause_for_gpu_launch,
     IPC::Message* reply_ptr) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
   std::unique_ptr<IPC::Message> reply(reply_ptr);
 
@@ -697,6 +700,7 @@ void RenderMessageFilter::OnEstablishGpuChannel(
 
 void RenderMessageFilter::OnHasGpuProcess(IPC::Message* reply_ptr) {
   std::unique_ptr<IPC::Message> reply(reply_ptr);
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   GpuProcessHost::GetProcessHandles(
       base::Bind(&RenderMessageFilter::GetGpuProcessHandlesCallback,
                  weak_ptr_factory_.GetWeakPtr(), base::Passed(&reply)));
@@ -707,7 +711,7 @@ void RenderMessageFilter::EstablishChannelCallback(
     const IPC::ChannelHandle& channel,
     const gpu::GPUInfo& gpu_info) {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
-
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   ChildProcessHostMsg_EstablishGpuChannel::WriteReplyParams(
       reply.get(), render_process_id_, channel, gpu_info);
   Send(reply.release());
@@ -716,6 +720,7 @@ void RenderMessageFilter::EstablishChannelCallback(
 void RenderMessageFilter::GetGpuProcessHandlesCallback(
     std::unique_ptr<IPC::Message> reply,
     const std::list<base::ProcessHandle>& handles) {
+  fprintf(stderr, "%s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
   bool has_gpu_process = handles.size() > 0;
   ChildProcessHostMsg_HasGpuProcess::WriteReplyParams(reply.get(),
                                                       has_gpu_process);
