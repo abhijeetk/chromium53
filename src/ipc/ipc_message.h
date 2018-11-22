@@ -19,9 +19,10 @@
 #include "ipc/brokerable_attachment.h"
 #include "ipc/ipc_export.h"
 
-#if !defined(NDEBUG)
-#define IPC_MESSAGE_LOG_ENABLED
-#endif
+//#if !defined(NDEBUG)
+//#define IPC_MESSAGE_LOG_ENABLED
+//#endif
+#define IPC_MESSAGE_LOG_ENABLED 1
 
 namespace IPC {
 

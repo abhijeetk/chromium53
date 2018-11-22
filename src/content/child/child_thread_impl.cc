@@ -7,7 +7,7 @@
 #include <signal.h>
 #include <string>
 #include <utility>
-
+#include "ipc/ipc_logging.h"
 #include "base/base_switches.h"
 #include "base/command_line.h"
 #include "base/debug/leak_annotations.h"
